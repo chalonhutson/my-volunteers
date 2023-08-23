@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 import "../css/Dashboard.css"
 
 import headshot_1 from "../assets/headshots/headshot_1.jpg"
@@ -24,7 +26,9 @@ export default function Dashboard() {
                         <p>71 takes</p>
                     </div>
                 </div>
-                <button className="heroBtn">view volunteers</button>
+                <Link to="/volunteers">
+                    <button className="heroBtn">view volunteers</button>
+                </Link>
             </div>
             <div className="cardLarge">
                 <h1>UPCOMING EVENTS</h1>

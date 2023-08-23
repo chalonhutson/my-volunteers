@@ -1,0 +1,24 @@
+table, th, td, tr {
+    width: 100%;
+}
+
+.volunteerRow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.volunteerImage {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.volunteerName {
+    font-size: .7rem;
+}
+
+.volunteerContact {
+    font-size: .5rem;
+}
