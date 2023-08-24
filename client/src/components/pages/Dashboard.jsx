@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 
-import "../css/Dashboard.css"
+import "../../css/Dashboard.css"
 
-import headshot_1 from "../assets/headshots/headshot_1.jpg"
-import headshot_19 from "../assets/headshots/headshot_19.jpg"
+import headshot_1 from "../../assets/headshots/headshot_1.jpg"
+import headshot_19 from "../../assets/headshots/headshot_19.jpg"
 
 export default function Dashboard() {
     return (

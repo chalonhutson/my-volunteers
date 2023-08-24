@@ -1,32 +1,34 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import "../css/Volunteers.css"
+import "../../css/Volunteers.css"
 
-import headshot_1 from "../assets/headshots/headshot_1.jpg";
-import headshot_2 from "../assets/headshots/headshot_2.jpg";
-import headshot_3 from "../assets/headshots/headshot_3.jpg";
-import headshot_4 from "../assets/headshots/headshot_4.jpg";
-import headshot_5 from "../assets/headshots/headshot_5.jpg";
-import headshot_6 from "../assets/headshots/headshot_6.jpg";
-import headshot_7 from "../assets/headshots/headshot_7.jpg";
-import headshot_8 from "../assets/headshots/headshot_8.jpg";
-import headshot_9 from "../assets/headshots/headshot_9.jpg";
-import headshot_10 from "../assets/headshots/headshot_10.jpg";
-import headshot_11 from "../assets/headshots/headshot_11.jpg";
-import headshot_12 from "../assets/headshots/headshot_12.jpg";
-import headshot_13 from "../assets/headshots/headshot_13.jpg";
-import headshot_14 from "../assets/headshots/headshot_14.jpg";
-import headshot_15 from "../assets/headshots/headshot_15.jpg";
-import headshot_16 from "../assets/headshots/headshot_16.jpg";
-import headshot_17 from "../assets/headshots/headshot_17.jpg";
-import headshot_18 from "../assets/headshots/headshot_18.jpg";
-import headshot_19 from "../assets/headshots/headshot_19.jpg";
-import headshot_20 from "../assets/headshots/headshot_20.jpg";
-import headshot_21 from "../assets/headshots/headshot_21.jpg";
-import headshot_22 from "../assets/headshots/headshot_22.jpg";
-import headshot_23 from "../assets/headshots/headshot_23.jpg";
-import headshot_24 from "../assets/headshots/headshot_24.jpg";
+import headshot_1 from "../../assets/headshots/headshot_1.jpg";
+import headshot_2 from "../../assets/headshots/headshot_2.jpg";
+import headshot_3 from "../../assets/headshots/headshot_3.jpg";
+import headshot_4 from "../../assets/headshots/headshot_4.jpg";
+import headshot_5 from "../../assets/headshots/headshot_5.jpg";
+import headshot_6 from "../../assets/headshots/headshot_6.jpg";
+import headshot_7 from "../../assets/headshots/headshot_7.jpg";
+import headshot_8 from "../../assets/headshots/headshot_8.jpg";
+import headshot_9 from "../../assets/headshots/headshot_9.jpg";
+import headshot_10 from "../../assets/headshots/headshot_10.jpg";
+import headshot_11 from "../../assets/headshots/headshot_11.jpg";
+import headshot_12 from "../../assets/headshots/headshot_12.jpg";
+import headshot_13 from "../../assets/headshots/headshot_13.jpg";
+import headshot_14 from "../../assets/headshots/headshot_14.jpg";
+import headshot_15 from "../../assets/headshots/headshot_15.jpg";
+import headshot_16 from "../../assets/headshots/headshot_16.jpg";
+import headshot_17 from "../../assets/headshots/headshot_17.jpg";
+import headshot_18 from "../../assets/headshots/headshot_18.jpg";
+import headshot_19 from "../../assets/headshots/headshot_19.jpg";
+import headshot_20 from "../../assets/headshots/headshot_20.jpg";
+import headshot_21 from "../../assets/headshots/headshot_21.jpg";
+import headshot_22 from "../../assets/headshots/headshot_22.jpg";
+import headshot_23 from "../../assets/headshots/headshot_23.jpg";
+import headshot_24 from "../../assets/headshots/headshot_24.jpg";
+
+import HeroBtn from '../buttons/HeroBtn';
 
 const volunteersArr = [
     {
@@ -155,9 +157,8 @@ const volunteersArr = [
 export default function Volunteers() {
     return (
         <div>
-            <Link to="/">
-                <button className="heroBtn">back to dashboard</button>
-            </Link>
+            <HeroBtn route="/" text="back to dashboard" />
+            <HeroBtn route="/add-volunteer" text="add volunteer" />
 
             <table className="table">
                 <thead>
