@@ -159,16 +159,15 @@ export default function Volunteers() {
                 <button className="heroBtn">back to dashboard</button>
             </Link>
 
-            <table>
-                <tbody>
-                    {/* <thead> */}
+            <table className="table">
+                <thead>
                     <tr className="volunteerRow">
-                        <th>*</th>
-                        <th>name</th>
-                        <th>preferred contact</th>
+                        <th scope="col"></th>
+                        <th scope="col">name</th>
+                        <th scope="col">preferred contact</th>
                     </tr>
-                    {/* </thead> */}
-                    {/* <tbody> */}
+                </thead>
+                <tbody>
                     {volunteersArr.map((volunteer, i) => {
                         return (
                             <tr className="volunteerRow" key={i}>

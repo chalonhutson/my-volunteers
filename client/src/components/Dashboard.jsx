@@ -42,7 +42,9 @@ export default function Dashboard() {
                     <p>Location: Dave & Busters</p>
                     <p>Time: Friday July 20, 2024</p>
                 </div>
-                <button className="heroBtn">view events</button>
+                <Link to="/events">
+                    <button className="heroBtn">view events</button>
+                </Link>
             </div>
         </div>
     )
