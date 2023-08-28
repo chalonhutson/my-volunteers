@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_migrate import Migrate
 
-from .extensions import api, db, jwt
+from .extensions import api, db, jwt, cors
 from .resources import ns
 
 def create_app():
@@ -16,6 +16,7 @@ def create_app():
     db.init_app(app)
     Migrate(app, db)
     jwt.init_app(app)
+    cors.init_app(app)
 
     api.add_namespace(ns)
 

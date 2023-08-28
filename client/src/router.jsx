@@ -4,12 +4,14 @@ import Volunteers from "./components/pages/Volunteers"
 import Events from "./components/pages/Events"
 import AddEvent from "./components/pages/AddEvent"
 import AddVolunteer from "./components/pages/AddVolunteer"
+import Login from "./components/pages/Login"
 
 export const router = createBrowserRouter([
     {
         element: <NavLayout />,
         children: [
             { path: "/", element: <Dashboard /> },
+            { path: "/login", element: <Login /> },
             { path: "/volunteers", element: <Volunteers /> },
             { path: "/events", element: <Events /> },
             { path: "/add-event", element: <AddEvent /> },
