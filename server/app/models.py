@@ -1,4 +1,5 @@
 import os
+import random
 from datetime import datetime
 
 from .extensions import db
@@ -50,6 +51,7 @@ class Volunteer(db.Model):
             "volunteer_id": self.volunteer_id,
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "image_url": self.image_url,
         }
 
 class Event(db.Model):
@@ -97,22 +99,21 @@ def populate_database():
     db.session.add_all([user1, user2])
     db.session.commit()
 
-    # Mixed volunteers for user1 and user2
     volunteers_user1 = [
-        Volunteer("Katniss", "Everdeen", user_id=user1.user_id),
-        Volunteer("Peeta", "Mellark", user_id=user1.user_id),
-        Volunteer("Effie", "Trinket", user_id=user1.user_id),
-        Volunteer("Cinna", "Cinna", user_id=user1.user_id),
-        Volunteer("Haymitch", "Abernathy", user_id=user1.user_id),
-        Volunteer("Gale", "Hawthorne", user_id=user1.user_id),
+        Volunteer("Katniss", "Everdeen", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Peeta", "Mellark", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Effie", "Trinket", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Cinna", "Cinna", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Haymitch", "Abernathy", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Gale", "Hawthorne", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
     ]
 
     volunteers_user2 = [
-        Volunteer("Hank", "Hill", user_id=user2.user_id),
-        Volunteer("Bobby", "Hill", user_id=user2.user_id),
-        Volunteer("Dale", "Gribble", user_id=user2.user_id),
-        Volunteer("Bill", "Dauterive", user_id=user2.user_id),
-        Volunteer("Peggy", "Hill", user_id=user2.user_id),
+        Volunteer("Hank", "Hill", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Bobby", "Hill", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Dale", "Gribble", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Bill", "Dauterive", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Peggy", "Hill", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
     ]
 
     db.session.add_all(volunteers_user1 + volunteers_user2)

@@ -1,7 +1,17 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import HeroBtn from '../buttons/HeroBtn'
 
 export default function Events() {
+
+    const [events, setEvents] = useState([])
+
+    useEffect(() => {
+        fetch('/api/events')
+            .then(res => res.json())
+            .then(data => setEvents(data))
+    }, [])
+
     return (
         <div>
             <HeroBtn route="/" text="back to dashboard" />
@@ -10,8 +20,19 @@ export default function Events() {
                     <th scope="col">event</th>
                     <th scope="col">location</th>
                     <th scope="col">time</th>
+                    <th scope="col">description</th>
                 </tr>
-                <tr>
+
+                {events.map(event => (
+                    <tr>
+                        <td className="eventData">{event.event_name}</td>
+                        <td className="eventData">{event.event_location}</td>
+                        <td className="eventData">{event.event_date}</td>
+                        <td className="eventData">{event.event_description}</td>
+                    </tr>
+                ))}
+
+                {/* <tr>
                     <td className="eventData">GOTV Door Knocking - LD15</td>
                     <td className="eventData">Field Office</td>
                     <td className="eventData">Saturday July 14, 2024</td>
@@ -25,7 +46,7 @@ export default function Events() {
                     <td>GOTV Door Knocking - LD15</td>
                     <td>Field Office</td>
                     <td>Saturday July 14, 2024</td>
-                </tr>
+                </tr> */}
             </table>
             <HeroBtn route="/add-event" text="add event" />
         </div>

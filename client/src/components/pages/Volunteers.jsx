@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import "../../css/Volunteers.css"
@@ -154,7 +154,18 @@ const volunteersArr = [
 ];
 
 
+
 export default function Volunteers() {
+
+    const [volunteers, setVolunteers] = useState([])
+
+    useEffect(() => {
+        fetch("/api/volunteers")
+            .then((res) => res.json())
+            .then((data) => {
+                setVolunteers(data)
+            })
+    }, [])
     return (
         <div>
             <HeroBtn route="/" text="back to dashboard" />
@@ -169,23 +180,23 @@ export default function Volunteers() {
                     </tr>
                 </thead>
                 <tbody>
-                    {volunteersArr.map((volunteer, i) => {
+                    {volunteers.map((volunteer, i) => {
                         return (
                             <tr className="volunteerRow" key={i}>
                                 <td>
-                                    <img
+                                    {/* <img
                                         className="volunteerImage"
-                                        src={volunteer.headshot}
-                                        alt={volunteer.name}
-                                    ></img>
+                                        src={`{volunteer.image_url}`}
+                                        alt={volunteer.first_name}
+                                    ></img> */}
                                 </td>
-                                <td className="volunteerName">{volunteer.name}</td>
+                                <td className="volunteerName">{volunteer.first_name} {volunteer.last_name}</td>
                                 <td className="volunteerContact">{volunteer.contact}</td>
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
-        </div>
+        </div >
     );
 }
