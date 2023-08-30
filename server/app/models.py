@@ -13,8 +13,8 @@ class User(db.Model):
     email = db.Column(db.String(99), nullable=False, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
 
-    volunteers = db.relationship("Volunteer", backref="user", lazy=True)
-    events = db.relationship("Event", backref="user", lazy=True)
+    volunteers = db.relationship("Volunteer", back_populates="user", lazy=True)
+    events = db.relationship("Event", back_populates="user", lazy=True)
 
     def __init__(self, email, password):
         self.email = email
@@ -36,6 +36,11 @@ class Volunteer(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(500), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+
+    user = db.relationship("User", back_populates="volunteers", lazy=True)
+
+    phones = db.relationship("Phone", back_populates="volunteer", lazy=True)
+    emails = db.relationship("Email", back_populates="volunteer", lazy=True)
 
     def __init__(self, first_name, last_name, user_id, image_url=None):
         self.first_name = first_name
@@ -64,6 +69,8 @@ class Event(db.Model):
     event_location = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
 
+    user = db.relationship("User", back_populates="events", lazy=True)
+
     def __init__(self, event_name, event_date, event_description, event_location, user_id):
         self.event_name = event_name
         self.event_date = event_date
@@ -82,6 +89,52 @@ class Event(db.Model):
             "event_description": self.event_description,
             "event_location": self.event_location,
         }
+
+class Phone(db.Model):
+    __tablename__ = "phones"
+
+    phone_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    phone_number = db.Column(db.String(20), nullable=False)
+    volunteer_id = db.Column(db.Integer, db.ForeignKey("volunteers.volunteer_id"), nullable=False)
+
+    volunteer = db.relationship("Volunteer", back_populates="phones", lazy=True)
+
+    def __init__(self, phone_number, volunteer):
+        self.phone_number = phone_number
+        self.volunteer = volunteer
+
+    def __repr__(self):
+        return f"<Phone {self.phone_number}>"
+
+    def get_dict(self):
+        return {
+            "phone_id": self.phone_id,
+            "phone_number": self.phone_number
+        }
+
+class Email(db.Model):
+    __tablename__ = "emails"
+
+    email_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email_address = db.Column(db.String(99), nullable=False)
+    volunteer_id = db.Column(db.Integer, db.ForeignKey("volunteers.volunteer_id"), nullable=False)
+
+    volunteer = db.relationship("Volunteer", back_populates="emails", lazy=True)
+
+    def __init__(self, email_address, volunteer):
+        self.email_address = email_address
+        self.volunteer = volunteer
+
+    def __repr__(self):
+        return f"<Email {self.email_address}>"
+
+    def get_dict(self):
+        return {
+            "email_id": self.email_id,
+            "email_address": self.email_address
+        }
+
+
 
 
 # Existing code...
@@ -118,6 +171,17 @@ def populate_database():
 
     db.session.add_all(volunteers_user1 + volunteers_user2)
     db.session.commit()
+
+    # Add some phone numbers and emails
+    for volunteer in volunteers_user1 + volunteers_user2:
+        for _ in range(random.randint(1, 3)):
+            phone = Phone(f"{random.randint(100, 999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}", volunteer)
+            db.session.add(phone)
+
+        for _ in range(random.randint(1, 3)):
+            rand_site = random.choice(["gmail", "yahoo", "hotmail", "aol"])
+            email = Email(f"{volunteer.first_name.lower()}.{volunteer.last_name.lower()}@{rand_site}.com", volunteer)
+            db.session.add(email)
 
     # Events based on "Hunger Games" and "King of the Hill"
     events = [

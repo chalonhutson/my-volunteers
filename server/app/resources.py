@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_tok
 
 from .extensions import db
 from .api_models import login_model
-from .models import User, Volunteer, Event
+from .models import User, Volunteer, Event, Phone, Email
 
 authorizations = {
     "jsonWebToken": {
@@ -63,6 +63,39 @@ class Events(Resource):
         db.session.commit()
 
         return {"res": "Event added successfully"}
+
+@ns.route("/volunteers/<int:volunteer_id>")
+class VolunteerById(Resource):
+    # method_decorators = [jwt_required()]
+
+    # @jwt_required()
+    def get(self, volunteer_id):
+        volunteer = Volunteer.query.get(volunteer_id)
+        volunteer_phones = Phone.query.filter_by(volunteer_id=volunteer_id).all()
+        volunteer_emails = Email.query.filter_by(volunteer_id=volunteer_id).all()
+
+        volunteer_dict = volunteer.get_dict()
+        volunteer_dict["phones"] = [phone.get_dict() for phone in volunteer_phones]
+        volunteer_dict["emails"] = [email.get_dict() for email in volunteer_emails]
+
+        return volunteer_dict
+
+    def put(self, volunteer_id):
+        volunteer = Volunteer.query.get(volunteer_id)
+        volunteer.first_name = ns.payload["first_name"]
+        volunteer.last_name = ns.payload["last_name"]
+        volunteer.image_url = ns.payload["image_url"]
+        db.session.commit()
+
+        return {"res": "Volunteer updated successfully"}
+
+    def delete(self, volunteer_id):
+        volunteer = Volunteer.query.get(volunteer_id)
+        db.session.delete(volunteer)
+        db.session.commit()
+
+        return {"res": "Volunteer deleted successfully"}
+
 
 @ns.route("/login")
 class Login(Resource):
