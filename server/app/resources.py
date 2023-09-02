@@ -23,18 +23,21 @@ class Volunteers(Resource):
 
     @ns.doc(security="jsonWebToken")
     def get(self):
-        print(get_jwt_identity())
-        volunteers = Volunteer.query.all()
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteers = Volunteer.query.filter_by(user_id=user.user_id).all()
+        if len(volunteers) == 0:
+            return {"res": "No volunteers found"}, 404
         return [volunteer.get_dict() for volunteer in volunteers]
 
+    @ns.doc(security="jsonWebToken")
     def post(self):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
         volunteer = Volunteer(
             first_name=ns.payload["first_name"],
             last_name=ns.payload["last_name"],
             image_url=f"headshot_{random.randint(1, 24)}.jpg",
-            user_id=1
+            user_id=user.user_id
         )
-        print(volunteer)
         db.session.add(volunteer)
         db.session.commit()
 
@@ -46,19 +49,22 @@ class Events(Resource):
 
     @ns.doc(security="jsonWebToken")
     def get(self):
-        # print(get_jwt_identity())
-        events = Event.query.all()
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        events = Event.query.filter_by(user_id=user.user_id).all()
+        if len(events) == 0:
+            return {"res": "No events found"}, 404
         return [event.get_dict() for event in events]
 
+    @ns.doc(security="jsonWebToken")
     def post(self):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
         event = Event(
             event_name=ns.payload["event_name"],
             event_location = ns.payload["event_location"],
             event_description=ns.payload["event_description"],
             event_date=ns.payload["event_date"],
-            user_id=1
+            user_id=user.user_id
         )
-        # print(event)
         db.session.add(event)
         db.session.commit()
 
@@ -68,9 +74,12 @@ class Events(Resource):
 class VolunteerById(Resource):
     method_decorators = [jwt_required()]
 
-    @jwt_required()
+    @ns.doc(security="jsonWebToken")
     def get(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
         volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to view this volunteer"}, 401
         volunteer_phones = Phone.query.filter_by(volunteer_id=volunteer_id).all()
         volunteer_emails = Email.query.filter_by(volunteer_id=volunteer_id).all()
 
@@ -80,8 +89,12 @@ class VolunteerById(Resource):
 
         return volunteer_dict
 
+    @ns.doc(security="jsonWebToken")
     def put(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
         volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to change this volunteer"}, 401
         volunteer.first_name = ns.payload["first_name"]
         volunteer.last_name = ns.payload["last_name"]
         volunteer.image_url = ns.payload["image_url"]
@@ -89,8 +102,12 @@ class VolunteerById(Resource):
 
         return {"res": "Volunteer updated successfully"}
 
+    @ns.doc(security="jsonWebToken")
     def delete(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
         volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to delete this volunteer"}, 401
         db.session.delete(volunteer)
         db.session.commit()
 
