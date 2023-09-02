@@ -11,6 +11,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["POSTGRES_URI"]
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["JWT_SECRET_KEY"] = os.environ["JWT_SECRET_KEY"]
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 180
 
     api.init_app(app)
     db.init_app(app)

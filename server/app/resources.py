@@ -19,11 +19,11 @@ ns = Namespace("api", authorizations=authorizations)
 
 @ns.route("/volunteers")
 class Volunteers(Resource):
-    # method_decorators = [jwt_required()]
+    method_decorators = [jwt_required()]
 
-    # @ns.doc(security="jsonWebToken")
+    @ns.doc(security="jsonWebToken")
     def get(self):
-        # print(get_jwt_identity())
+        print(get_jwt_identity())
         volunteers = Volunteer.query.all()
         return [volunteer.get_dict() for volunteer in volunteers]
 
@@ -42,9 +42,9 @@ class Volunteers(Resource):
 
 @ns.route("/events")
 class Events(Resource):
-    # method_decorators = [jwt_required()]
+    method_decorators = [jwt_required()]
 
-    # @ns.doc(security="jsonWebToken")
+    @ns.doc(security="jsonWebToken")
     def get(self):
         # print(get_jwt_identity())
         events = Event.query.all()
@@ -66,9 +66,9 @@ class Events(Resource):
 
 @ns.route("/volunteers/<int:volunteer_id>")
 class VolunteerById(Resource):
-    # method_decorators = [jwt_required()]
+    method_decorators = [jwt_required()]
 
-    # @jwt_required()
+    @jwt_required()
     def get(self, volunteer_id):
         volunteer = Volunteer.query.get(volunteer_id)
         volunteer_phones = Phone.query.filter_by(volunteer_id=volunteer_id).all()

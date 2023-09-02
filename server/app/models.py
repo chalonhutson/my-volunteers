@@ -58,7 +58,6 @@ class Volunteer(db.Model):
             "last_name": self.last_name,
             "image_url": self.image_url,
         }
-
 class Event(db.Model):
     __tablename__ = "events"
 
