@@ -17,6 +17,24 @@ authorizations = {
 
 ns = Namespace("api", authorizations=authorizations)
 
+""" Authenticate a user and return an access token. """
+@ns.route("/login")
+class Login(Resource):
+
+    @ns.expect(login_model)
+    def post(self):
+        email = ns.payload["email"]
+        password = ns.payload["password"]
+
+        user = User.query.filter_by(email=email).first()
+
+        if user is None or not user.check_password(password):
+            return {"res": "Invalid username or password"}, 401
+
+        return {"access_token": create_access_token(identity=user.email)}
+
+
+""" Get all volunteers for a user and add new volunteers. """
 @ns.route("/volunteers")
 class Volunteers(Resource):
     method_decorators = [jwt_required()]
@@ -43,33 +61,8 @@ class Volunteers(Resource):
 
         return {"res": "Volunteer added successfully"}
 
-@ns.route("/events")
-class Events(Resource):
-    method_decorators = [jwt_required()]
 
-    @ns.doc(security="jsonWebToken")
-    def get(self):
-        user = User.query.filter_by(email=get_jwt_identity()).first()
-        events = Event.query.filter_by(user_id=user.user_id).all()
-        if len(events) == 0:
-            return {"res": "No events found"}, 404
-        return [event.get_dict() for event in events]
-
-    @ns.doc(security="jsonWebToken")
-    def post(self):
-        user = User.query.filter_by(email=get_jwt_identity()).first()
-        event = Event(
-            event_name=ns.payload["event_name"],
-            event_location = ns.payload["event_location"],
-            event_description=ns.payload["event_description"],
-            event_date=ns.payload["event_date"],
-            user_id=user.user_id
-        )
-        db.session.add(event)
-        db.session.commit()
-
-        return {"res": "Event added successfully"}
-
+""" Get, update, and delete a volunteer by id """
 @ns.route("/volunteers/<int:volunteer_id>")
 class VolunteerById(Resource):
     method_decorators = [jwt_required()]
@@ -114,17 +107,69 @@ class VolunteerById(Resource):
         return {"res": "Volunteer deleted successfully"}
 
 
-@ns.route("/login")
-class Login(Resource):
+""" Get all events for a user and add new events. """
+@ns.route("/events")
+class Events(Resource):
+    method_decorators = [jwt_required()]
 
-    @ns.expect(login_model)
+    @ns.doc(security="jsonWebToken")
+    def get(self):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        events = Event.query.filter_by(user_id=user.user_id).all()
+        if len(events) == 0:
+            return {"res": "No events found"}, 404
+        return [event.get_dict() for event in events]
+
+    @ns.doc(security="jsonWebToken")
     def post(self):
-        email = ns.payload["email"]
-        password = ns.payload["password"]
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event(
+            event_name=ns.payload["event_name"],
+            event_location = ns.payload["event_location"],
+            event_description=ns.payload["event_description"],
+            event_date=ns.payload["event_date"],
+            user_id=user.user_id
+        )
+        db.session.add(event)
+        db.session.commit()
 
-        user = User.query.filter_by(email=email).first()
+        return {"res": "Event added successfully"}
 
-        if user is None or not user.check_password(password):
-            return {"res": "Invalid username or password"}, 401
+""" Get, update, and delete an event by id """
+@ns.route("/events/<int:event_id>")
+class EventById(Resource):
+    method_decorators = [jwt_required()]
 
-        return {"access_token": create_access_token(identity=user.email)}
+    @ns.doc(security="jsonWebToken")
+    def get(self, event_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event.query.get(event_id)
+        if event.user_id != user.user_id:
+            return {"res": "You are not authorized to view this event"}, 401
+
+        return event.get_dict()
+
+    @ns.doc(security="jsonWebToken")
+    def put(self, event_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event.query.get(event_id)
+        if event.user_id != user.user_id:
+            return {"res": "You are not authorized to change this event"}, 401
+        event.event_name = ns.payload["event_name"]
+        event.event_location = ns.payload["event_location"]
+        event.event_description = ns.payload["event_description"]
+        event.event_date = ns.payload["event_date"]
+        db.session.commit()
+
+        return {"res": "Event updated successfully"}
+
+    @ns.doc(security="jsonWebToken")
+    def delete(self, event_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event.query.get(event_id)
+        if event.user_id != user.user_id:
+            return {"res": "You are not authorized to delete this event"}, 401
+        db.session.delete(event)
+        db.session.commit()
+
+        return {"res": "Event deleted successfully"}
