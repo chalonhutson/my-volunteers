@@ -35,6 +35,7 @@ class Volunteer(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(500), nullable=True)
+    preferred_contact = db.Column(db.String(20), nullable=False, default="none")
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
 
     user = db.relationship("User", back_populates="volunteers", lazy=True)
@@ -42,10 +43,11 @@ class Volunteer(db.Model):
     phones = db.relationship("Phone", back_populates="volunteer", lazy=True)
     emails = db.relationship("Email", back_populates="volunteer", lazy=True)
 
-    def __init__(self, first_name, last_name, user_id, image_url=None):
+    def __init__(self, first_name, last_name, user_id , preferred_contact, image_url=None):
         self.first_name = first_name
         self.last_name = last_name
         self.image_url = image_url
+        self.preferred_contact = preferred_contact
         self.user_id = user_id
 
     def __repr__(self):
@@ -152,20 +154,20 @@ def populate_database():
     db.session.commit()
 
     volunteers_user1 = [
-        Volunteer("Katniss", "Everdeen", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Peeta", "Mellark", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Effie", "Trinket", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Cinna", "Cinna", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Haymitch", "Abernathy", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Gale", "Hawthorne", user_id=user1.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Katniss", "Everdeen", user1.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Peeta", "Mellark", user1.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Effie", "Trinket", user1.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Cinna", "Cinna", user1.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Haymitch", "Abernathy", user1.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Gale", "Hawthorne", user1.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
     ]
 
     volunteers_user2 = [
-        Volunteer("Hank", "Hill", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Bobby", "Hill", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Dale", "Gribble", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Bill", "Dauterive", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Peggy", "Hill", user_id=user2.user_id, image_url=f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Hank", "Hill", user2.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Bobby", "Hill", user2.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Dale", "Gribble", user2.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Bill", "Dauterive", user2.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Peggy", "Hill", user2.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
     ]
 
     db.session.add_all(volunteers_user1 + volunteers_user2)
