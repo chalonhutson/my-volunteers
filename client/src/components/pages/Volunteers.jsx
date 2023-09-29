@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { useAuthHeader } from "react-auth-kit"
+
 import "../../css/Volunteers.css"
 
 import headshot_1 from "../../assets/headshots/headshot_1.jpg";
@@ -158,10 +160,20 @@ const volunteersArr = [
 export default function Volunteers() {
 
     const [volunteers, setVolunteers] = useState([])
+    const authHeader = useAuthHeader()
 
     useEffect(() => {
-        fetch("/api/volunteers")
-            .then((res) => res.json())
+        console.log(authHeader())
+        fetch("/api/volunteers", {
+            method: "GET",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((res) =>
+                res.json()
+            )
             .then((data) => {
                 setVolunteers(data)
             })

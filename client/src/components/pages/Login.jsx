@@ -1,17 +1,21 @@
-import { useRef } from 'react'
+import { useRef } from "react"
+import { useSignIn } from "react-auth-kit"
+import { redirect, useNavigate } from "react-router-dom"
 
 export default function Login() {
 
     const emailRef = useRef()
     const passwordRef = useRef()
+    const signIn = useSignIn()
+    const navigate = useNavigate()
 
     function loginHandler(e) {
         e.preventDefault()
         const email = emailRef.current.value
         const password = passwordRef.current.value
-        console.log(email, password)
+        console.log("attempting login")
 
-        fetch('http://localhost:5000/api/login', {
+        fetch("http://localhost:5000/api/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -20,18 +24,25 @@ export default function Login() {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                if (data.token) {
-                    localStorage.setItem('token', data.token)
-                    window.location.href = "/"
-                }
+                console.log("Signing in.")
+                signIn(
+                    {
+                        token: data.access_token,
+                        tokenType: "Bearer",
+                        expiresIn: 3600,
+                        authState: { email: data.email }
+                    }
+                )
+                // window.location.href = "/"
+                navigate("/")
             })
+
     }
 
     return (
         <div>
             <h1>Login</h1>
-            <form>
+            <form onSubmit={(e) => loginHandler(e)}>
                 <label htmlFor="email">Email</label>
                 <input ref={emailRef} type="email" name="email" id="email" placeholder="Enter your email" />
                 <br></br>
@@ -40,7 +51,7 @@ export default function Login() {
                 <input ref={passwordRef} type="password" name="password" id="password" placeholder="Enter your password" />
                 <br></br>
                 <br></br>
-                <button onClick={(e) => loginHandler(e)} className="btn btn-primary" type="submit">Login</button>
+                <button className="btn btn-primary" type="submit">Login</button>
             </form>
         </div>
     )
