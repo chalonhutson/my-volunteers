@@ -2,12 +2,22 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import HeroBtn from '../buttons/HeroBtn'
 
+import { useAuthHeader } from "react-auth-kit"
+
 export default function Events() {
 
     const [events, setEvents] = useState([])
+    const authHeader = useAuthHeader()
+
 
     useEffect(() => {
-        fetch('/api/events')
+        fetch('/api/events', {
+            method: "GET",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            }
+        })
             .then(res => res.json())
             .then(data => setEvents(data))
     }, [])

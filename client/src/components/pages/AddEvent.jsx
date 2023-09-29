@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import HeroBtn from '../buttons/HeroBtn'
+import { useAuthHeader } from 'react-auth-kit'
 
 export default function AddEvent() {
 
@@ -7,6 +8,8 @@ export default function AddEvent() {
     const eventLocationRef = useRef()
     const eventDateRef = useRef()
     const eventDescriptionRef = useRef()
+
+    const authHeader = useAuthHeader()
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -20,6 +23,7 @@ export default function AddEvent() {
         fetch('/api/events', {
             method: 'POST',
             headers: {
+                "Authorization": authHeader(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newEvent)

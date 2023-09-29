@@ -1,8 +1,10 @@
 import { useState, useRef } from "react"
+import { useAuthHeader } from "react-auth-kit"
 import { Link } from "react-router-dom"
 
 export default function AddVolunteer() {
     const [phoneInputs, setPhoneInputs] = useState([])
+    const authHeader = useAuthHeader()
 
     function renderPhoneInputs() {
         return phoneInputs.map((input, i) => {
@@ -19,6 +21,7 @@ export default function AddVolunteer() {
 
     const firstNameRef = useRef()
     const lastNameRef = useRef()
+    const preferredContactRef = useRef()
 
     function addPhoneInput() {
         setPhoneInputs([...phoneInputs, { value: "" }])
@@ -35,12 +38,14 @@ export default function AddVolunteer() {
         e.preventDefault()
         const newVolunteer = {
             first_name: firstNameRef.current.value,
-            last_name: lastNameRef.current.value
+            last_name: lastNameRef.current.value,
+            preferred_contact: preferredContactRef.current.value,
         }
         console.log(newVolunteer)
         fetch('/api/volunteers', {
             method: 'POST',
             headers: {
+                "Authorization": authHeader(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newVolunteer)
@@ -62,7 +67,7 @@ export default function AddVolunteer() {
                 <label htmlFor="last-name">Last Name</label>
                 <input ref={lastNameRef} className="form-control" type="text" name="last-name" id="last-name" />
                 <label htmlFor="preferred-contact">Preferred Contact</label>
-                <select className="form-select" name="preferred-contact" id="preferred-contact">
+                <select ref={preferredContactRef} className="form-select" name="preferred-contact" id="preferred-contact">
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
                 </select>
