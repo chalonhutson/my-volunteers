@@ -31,7 +31,7 @@ class Login(Resource):
         if user is None or not user.check_password(password):
             return {"res": "Invalid username or password"}, 401
 
-        return {"access_token": create_access_token(identity=user.email)}
+        return {"access_token": create_access_token(identity=user.email), "email": email}
 
 
 """ Get all volunteers for a user and add new volunteers. """
@@ -51,10 +51,11 @@ class Volunteers(Resource):
     def post(self):
         user = User.query.filter_by(email=get_jwt_identity()).first()
         volunteer = Volunteer(
-            first_name=ns.payload["first_name"],
-            last_name=ns.payload["last_name"],
+            ns.payload["first_name"],
+            ns.payload["last_name"],
+            user.user_id,
+            ns.payload["preferred_contact"],
             image_url=f"headshot_{random.randint(1, 24)}.jpg",
-            user_id=user.user_id
         )
         db.session.add(volunteer)
         db.session.commit()
