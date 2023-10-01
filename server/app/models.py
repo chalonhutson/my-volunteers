@@ -86,7 +86,8 @@ class Event(db.Model):
         return {
             "event_id": self.event_id,
             "event_name": self.event_name,
-            "event_date": self.event_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "event_datetime": self.event_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "event_date": self.event_date.strftime("%Y-%m-%d"),
             "event_description": self.event_description,
             "event_location": self.event_location,
         }

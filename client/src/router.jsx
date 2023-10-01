@@ -4,6 +4,8 @@ import Volunteers from "./components/pages/Volunteers"
 import Events from "./components/pages/Events"
 import AddEvent from "./components/pages/AddEvent"
 import AddVolunteer from "./components/pages/AddVolunteer"
+import UpdateVolunteer from "./components/pages/UpdateVolunteer"
+import UpdateEvent from "./components/pages/UpdateEvent"
 import Login from "./components/pages/Login"
 import { RequireAuth } from "react-auth-kit"
 
@@ -52,6 +54,22 @@ export const router = createBrowserRouter([
                     </RequireAuth>
                 )
             },
+            {
+                path: "/volunteers/:volunteerId",
+                element: (
+                    <RequireAuth loginPath="/login">
+                        <UpdateVolunteer />
+                    </RequireAuth>
+                )
+            },
+            {
+                path: "/events/:eventId",
+                element: (
+                    <RequireAuth loginPath="/login">
+                        <UpdateEvent />
+                    </RequireAuth>
+                )
+            }
         ]
     }
 ])

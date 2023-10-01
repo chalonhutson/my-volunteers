@@ -194,17 +194,19 @@ export default function Volunteers() {
                 <tbody>
                     {volunteers.map((volunteer, i) => {
                         return (
-                            <tr className="volunteerRow" key={i}>
-                                <td>
-                                    {/* <img
+                            <Link to={`/volunteers/${volunteer.volunteer_id}`}>
+                                <tr className="volunteerRow" key={i}>
+                                    <td>
+                                        {/* <img
                                         className="volunteerImage"
                                         src={`{volunteer.image_url}`}
                                         alt={volunteer.first_name}
                                     ></img> */}
-                                </td>
-                                <td className="volunteerName">{volunteer.first_name} {volunteer.last_name}</td>
-                                <td className="volunteerContact">{volunteer.contact}</td>
-                            </tr>
+                                    </td>
+                                    <td className="volunteerName">{volunteer.first_name} {volunteer.last_name}</td>
+                                    <td className="volunteerContact">{volunteer.contact}</td>
+                                </tr>
+                            </Link>
                         );
                     })}
                 </tbody>
