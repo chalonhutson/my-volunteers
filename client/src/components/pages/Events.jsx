@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuthHeader } from "react-auth-kit"
+
 import HeroBtn from '../buttons/HeroBtn'
 
-import { useAuthHeader } from "react-auth-kit"
 
 export default function Events() {
 
@@ -34,12 +35,14 @@ export default function Events() {
                 </tr>
 
                 {events.map(event => (
-                    <tr>
-                        <td className="eventData">{event.event_name}</td>
-                        <td className="eventData">{event.event_location}</td>
-                        <td className="eventData">{event.event_date}</td>
-                        <td className="eventData">{event.event_description}</td>
-                    </tr>
+                    <Link to={`/events/${event.event_id}`}>
+                        <tr>
+                            <td className="eventData">{event.event_name}</td>
+                            <td className="eventData">{event.event_location}</td>
+                            <td className="eventData">{event.event_date}</td>
+                            <td className="eventData">{event.event_description}</td>
+                        </tr>
+                    </Link>
                 ))}
 
                 {/* <tr>
