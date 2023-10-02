@@ -1,8 +1,11 @@
 import { useState, useRef } from "react"
 import { useAuthHeader } from "react-auth-kit"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function AddVolunteer() {
+
+    const navigate = useNavigate()
+
     const [phoneInputs, setPhoneInputs] = useState([])
     const authHeader = useAuthHeader()
 
@@ -51,7 +54,11 @@ export default function AddVolunteer() {
             body: JSON.stringify(newVolunteer)
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                console.log(data)
+                navigate("/volunteers")
+            }
+            )
     }
 
 

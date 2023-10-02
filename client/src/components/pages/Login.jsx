@@ -22,7 +22,12 @@ export default function Login() {
             },
             body: JSON.stringify({ email, password })
         })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
             .then(data => {
                 console.log("Signing in.")
                 signIn(
@@ -33,7 +38,6 @@ export default function Login() {
                         authState: { email: data.email }
                     }
                 )
-                // window.location.href = "/"
                 navigate("/")
             })
 

@@ -61,6 +61,23 @@ export default function UpdateEvent() {
             })
     }
 
+    function handleDelete() {
+        fetch(`/api/events/${eventId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((res) =>
+                res.json()
+            )
+            .then((data) => {
+                console.log(data)
+                navigate("/events")
+            })
+    }
+
     return (
         <div>
             <h1>Add Event</h1>
@@ -88,6 +105,7 @@ export default function UpdateEvent() {
                 ></textarea>
                 <button className="btn btn-primary" type="submit">Submit</button>
             </form>
+            <button onClick={() => handleDelete()} className="btn btn-danger">Delete</button>
         </div>
     )
 }
