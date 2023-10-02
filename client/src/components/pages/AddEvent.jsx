@@ -1,8 +1,12 @@
 import { useRef } from 'react'
-import HeroBtn from '../buttons/HeroBtn'
 import { useAuthHeader } from 'react-auth-kit'
+import { useNavigate } from 'react-router-dom'
+
+import HeroBtn from '../buttons/HeroBtn'
 
 export default function AddEvent() {
+
+    const navigate = useNavigate()
 
     const eventNameRef = useRef()
     const eventLocationRef = useRef()
@@ -29,7 +33,11 @@ export default function AddEvent() {
             body: JSON.stringify(newEvent)
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                console.log(data)
+                navigate('/events')
+            }
+            )
     }
 
     return (

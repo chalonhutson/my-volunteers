@@ -171,9 +171,12 @@ export default function Volunteers() {
                 'Content-Type': 'application/json',
             }
         })
-            .then((res) =>
-                res.json()
-            )
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
             .then((data) => {
                 setVolunteers(data)
             })

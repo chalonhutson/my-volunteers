@@ -44,9 +44,32 @@ export default function UpdateVolunteer() {
             },
             body: JSON.stringify(volunteer)
         })
-            .then((res) =>
-                res.json()
-            )
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                console.log(data)
+                navigate("/volunteers")
+            })
+    }
+
+    function handleDelete() {
+        fetch(`/api/volunteers/${volunteerId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
             .then((data) => {
                 console.log(data)
                 navigate("/volunteers")
@@ -58,7 +81,7 @@ export default function UpdateVolunteer() {
             <Link to="/volunteers">
                 <button className="heroBtn">back to volunteers</button>
             </Link>
-            <h1>Add Volunteer</h1>
+            <h1>Edit Volunteer</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="name">First Name</label>
                 <input className="form-control" type="text" name="name" id="name"
@@ -81,6 +104,7 @@ export default function UpdateVolunteer() {
                 <br></br>
                 <button className="btn btn-primary" type="submit">Submit</button>
             </form>
+            <button onClick={() => handleDelete()} className="btn btn-danger">Delete</button>
         </div>
     )
 }
