@@ -1,0 +1,22 @@
+.eventsGrid {
+    background-color: var(--accent-color);
+    border-radius: 1rem;
+    padding: .5rem 1rem;
+    margin: .5rem .5rem;
+}
+
+.eventsGridRow, .eventsGridHeader {
+    display: grid;
+    grid-template-columns: 30% 20% 20% 30%;
+}
+
+
+.eventsGridRow:hover {
+    cursor: pointer;
+    background-color: var(--background-color);
+}
+
+.eventData {
+    outline: black 1px solid;
+    font-size: .75rem;
+}
