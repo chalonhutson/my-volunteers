@@ -1,10 +1,23 @@
-
-
-.volunteerRow {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+.volunteersGrid {
+    background-color: var(--accent-color);
+    border-radius: 1rem;
+    padding: .5rem 1rem;
+    margin: .5rem .5rem;
 }
+
+.volunteersGridRow, .volunteersGridHeader {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr .75fr;
+    outline: black 1px solid;
+    font-size: .75rem;
+}
+
+
+.volunteersGridRow:hover {
+    cursor: pointer;
+    background-color: var(--background-color);
+}
+
 
 .volunteerImage {
     width: 3rem;
