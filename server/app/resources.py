@@ -74,12 +74,12 @@ class VolunteerById(Resource):
         volunteer = Volunteer.query.get(volunteer_id)
         if volunteer.user_id != user.user_id:
             return {"res": "You are not authorized to view this volunteer"}, 401
-        volunteer_phones = Phone.query.filter_by(volunteer_id=volunteer_id).all()
-        volunteer_emails = Email.query.filter_by(volunteer_id=volunteer_id).all()
+        # volunteer_phones = Phone.query.filter_by(volunteer_id=volunteer_id).all()
+        # volunteer_emails = Email.query.filter_by(volunteer_id=volunteer_id).all()
 
         volunteer_dict = volunteer.get_dict()
-        volunteer_dict["phones"] = [phone.get_dict() for phone in volunteer_phones]
-        volunteer_dict["emails"] = [email.get_dict() for email in volunteer_emails]
+        volunteer_dict["phones"] = [phone.get_dict() for phone in volunteer.phones]
+        volunteer_dict["emails"] = [email.get_dict() for email in volunteer.emails]
 
         return volunteer_dict
 
