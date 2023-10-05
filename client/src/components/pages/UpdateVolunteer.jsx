@@ -98,10 +98,11 @@ export default function UpdateVolunteer() {
                     value={volunteer.last_name}
                     onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
                 />
-                <label htmlFor="preferred-contact">Preferred Contact</label>
-                <select className="form-select" name="preferred-contact" id="preferred-contact">
+                <label htmlFor="preferred-contact-method">Preferred Contact</label>
+                <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
+                    <option value="none">None</option>
                 </select>
                 <label htmlFor="add-phone">Phone</label>
                 <button onClick={() => console.log("addPhoneInput()")} className="btn btn-primary" type="button" id="add-phone">+</button>
