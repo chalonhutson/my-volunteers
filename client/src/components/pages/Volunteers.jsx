@@ -56,7 +56,7 @@ export default function Volunteers() {
                                     ></img> */}
                             </span>
                             <span className="volunteerName">{volunteer.first_name} {volunteer.last_name}</span>
-                            <span className="volunteerContact">{volunteer.contact}</span>
+                            <span className="volunteerContact">{volunteer.preferred_contact.contact}</span>
                         </div>
                     );
                 })}
