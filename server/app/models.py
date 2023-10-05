@@ -54,12 +54,34 @@ class Volunteer(db.Model):
         return f"<Volunteer {self.first_name} {self.last_name}>"
 
     def get_dict(self):
+        if self.preferred_contact == "email":
+            preferred_contact = Email.query.filter_by(volunteer_id=self.volunteer_id).first()
+
+            if preferred_contact:
+                preferred_contact = preferred_contact.email_address
+            else:
+                preferred_contact = "none"
+        elif self.preferred_contact == "phone":
+            preferred_contact = Phone.query.filter_by(volunteer_id=self.volunteer_id).first()
+
+            if preferred_contact:
+                preferred_contact = preferred_contact.phone_number
+            else:
+                preferred_contact = "none"
+        else:
+            preferred_contact = "none"
+
         return {
             "volunteer_id": self.volunteer_id,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "image_url": self.image_url,
+            "preferred_contact": {
+                "method": self.preferred_contact,
+                "contact": preferred_contact
+            }
         }
+
 class Event(db.Model):
     __tablename__ = "events"
 

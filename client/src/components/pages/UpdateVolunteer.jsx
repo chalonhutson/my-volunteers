@@ -10,8 +10,12 @@ export default function UpdateVolunteer() {
     const [volunteer, setVolunteer] = useState({
         first_name: "",
         last_name: "",
-        preferred_contact: "",
-        phone: ""
+        preferred_contact: {
+            method: "none",
+            contact: "none"
+        },
+        phones: [],
+        emails: []
     })
 
     const { volunteerId } = useParams()
@@ -76,6 +80,7 @@ export default function UpdateVolunteer() {
             })
     }
 
+
     return (
         <div>
             <Link to="/volunteers">
@@ -93,14 +98,29 @@ export default function UpdateVolunteer() {
                     value={volunteer.last_name}
                     onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
                 />
-                <label htmlFor="preferred-contact">Preferred Contact</label>
-                <select className="form-select" name="preferred-contact" id="preferred-contact">
+                <label htmlFor="preferred-contact-method">Preferred Contact</label>
+                <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
+                    <option value="none">None</option>
                 </select>
                 <label htmlFor="add-phone">Phone</label>
-                <button onClick={() => addPhoneInput()} className="btn btn-primary" type="button" id="add-phone">+</button>
-                {/* {renderPhoneInputs()} */}
+                <button onClick={() => console.log("addPhoneInput()")} className="btn btn-primary" type="button" id="add-phone">+</button>
+                <br></br>
+                {volunteer.phones.map((phone) => {
+                    return (
+                        <input key={phone.phone_id} value={phone.phone_number}></input>
+                    )
+                })}
+                <br></br>
+                <label htmlFor="add-email">Email</label>
+                <button onClick={() => console.log("addEmailInput()")} className="btn btn-primary" type="button" id="add-email">+</button>
+                <br></br>
+                {volunteer.emails.map((email) => {
+                    return (
+                        <input key={email.email_id} value={email.email_address}></input>
+                    )
+                })}
                 <br></br>
                 <button className="btn btn-primary" type="submit">Submit</button>
             </form>
