@@ -2,6 +2,8 @@ import { useRef } from "react"
 import { useSignIn } from "react-auth-kit"
 import { redirect, useNavigate } from "react-router-dom"
 
+import { toast } from 'react-toastify'
+
 export default function Login() {
 
     const emailRef = useRef()
@@ -24,7 +26,9 @@ export default function Login() {
         })
             .then(res => {
                 if (!res.ok) {
-                    throw new Error("Network response was not ok")
+                    // throw new Error("Network response was not ok")
+                    toast.error("Your email or password is incorrect.")
+                    return
                 }
                 return res.json()
             })
@@ -38,6 +42,7 @@ export default function Login() {
                         authState: { email: data.email }
                     }
                 )
+                toast.success("You have successfully logged in.")
                 navigate("/")
             })
 
