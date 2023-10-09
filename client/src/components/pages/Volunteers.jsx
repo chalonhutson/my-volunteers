@@ -6,6 +6,8 @@ import "../../css/Volunteers.css"
 
 import HeroBtn from '../buttons/HeroBtn';
 
+import image from "../../assets/headshots/headshot_1.jpg"
+
 
 
 
@@ -41,19 +43,19 @@ export default function Volunteers() {
 
             <div className="volunteersGrid">
                 <div className="volunteersGridHeader">
-                    <span>image</span>
-                    <span>name</span>
-                    <span>preferred contact</span>
+                    <span className="volunteerHeader">image</span>
+                    <span className="volunteerHeader">name</span>
+                    <span className="volunteerHeader">preferred contact</span>
                 </div>
                 {volunteers.map((volunteer, i) => {
                     return (
                         <div className="volunteersGridRow" onClick={() => navigate(`/volunteers/${volunteer.volunteer_id}`)} key={i}>
                             <span>
-                                {/* <img
-                                        className="volunteerImage"
-                                        src={`{ volunteer.image_url }`}
-                                        alt={volunteer.first_name}
-                                    ></img> */}
+                                <img
+                                    className="volunteerImage"
+                                    src={image}
+                                    alt={volunteer.first_name}
+                                ></img>
                             </span>
                             <span className="volunteerName">{volunteer.first_name} {volunteer.last_name}</span>
                             <span className="volunteerContact">{volunteer.preferred_contact.contact}</span>
