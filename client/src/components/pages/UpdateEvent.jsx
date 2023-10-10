@@ -4,6 +4,8 @@ import { useAuthHeader } from "react-auth-kit"
 
 import HeroBtn from '../buttons/HeroBtn'
 
+import "../../css/AddUpdateVolunteerEvent.css"
+
 export default function UpdateEvent() {
 
     const { eventId } = useParams()
@@ -80,32 +82,42 @@ export default function UpdateEvent() {
 
     return (
         <div>
-            <h1>Add Event</h1>
             <HeroBtn route="/events" text="back to events" />
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="event">Event</label>
-                <input className="form-control" type="text" name="event" id="event"
-                    value={event.event_name}
-                    onChange={(e) => setEvent({ ...event, event_name: e.target.value })}
-                />
-                <label htmlFor="location">Location</label>
-                <input className="form-control" type="text" name="location" id="location"
-                    value={event.event_location}
-                    onChange={(e) => setEvent({ ...event, event_location: e.target.value })}
-                />
-                <label htmlFor="date">Date</label>
-                <input className="form-control" type="date" name="date" id="time"
-                    value={event.event_date}
-                    onChange={(e) => setEvent({ ...event, event_date: e.target.value })}
-                />
-                <label htmlFor="description">Description</label>
-                <textarea className="form-control" name="description" id="description" cols="30" rows="10"
-                    value={event.event_description}
-                    onChange={(e) => setEvent({ ...event, event_description: e.target.value })}
-                ></textarea>
-                <button className="btn btn-primary" type="submit">Submit</button>
-            </form>
-            <button onClick={() => handleDelete()} className="btn btn-danger">Delete</button>
+            <div className="cardLarge">
+                <h1 className="mt-2">Edit Event</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="event">Event</label>
+                        <input className="form-control" type="text" name="event" id="event"
+                            value={event.event_name}
+                            onChange={(e) => setEvent({ ...event, event_name: e.target.value })}
+                        />
+                    </div>
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="location">Location</label>
+                        <input className="form-control" type="text" name="location" id="location"
+                            value={event.event_location}
+                            onChange={(e) => setEvent({ ...event, event_location: e.target.value })}
+                        />
+                    </div>
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="date">Date</label>
+                        <input className="form-control" type="date" name="date" id="time"
+                            value={event.event_date}
+                            onChange={(e) => setEvent({ ...event, event_date: e.target.value })}
+                        />
+                    </div>
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="description">Description</label>
+                        <textarea className="form-control" name="description" id="description" cols="30" rows="10"
+                            value={event.event_description}
+                            onChange={(e) => setEvent({ ...event, event_description: e.target.value })}
+                        ></textarea>
+                    </div>
+                    <button className="mt-3 heroBtn" type="submit">Submit</button>
+                </form>
+                <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
+            </div>
         </div>
     )
 }

@@ -2,6 +2,8 @@ import { Link, useParams, useNavigate } from "react-router-dom"
 import { useRef, useState, useEffect } from "react"
 import { useAuthHeader } from "react-auth-kit"
 
+import "../../css/AddUpdateVolunteerEvent.css"
+
 export default function UpdateVolunteer() {
 
     const authHeader = useAuthHeader()
@@ -86,45 +88,63 @@ export default function UpdateVolunteer() {
             <Link to="/volunteers">
                 <button className="heroBtn">back to volunteers</button>
             </Link>
-            <h1>Edit Volunteer</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="name">First Name</label>
-                <input className="form-control" type="text" name="name" id="name"
-                    value={volunteer.first_name}
-                    onChange={(e) => setVolunteer({ ...volunteer, first_name: e.target.value })}
-                />
-                <label htmlFor="last-name">Last Name</label>
-                <input className="form-control" type="text" name="last-name" id="last-name"
-                    value={volunteer.last_name}
-                    onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
-                />
-                <label htmlFor="preferred-contact-method">Preferred Contact</label>
-                <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                    <option value="none">None</option>
-                </select>
-                <label htmlFor="add-phone">Phone</label>
-                <button onClick={() => console.log("addPhoneInput()")} className="btn btn-primary" type="button" id="add-phone">+</button>
-                <br></br>
-                {volunteer.phones.map((phone) => {
-                    return (
-                        <input key={phone.phone_id} value={phone.phone_number}></input>
-                    )
-                })}
-                <br></br>
-                <label htmlFor="add-email">Email</label>
-                <button onClick={() => console.log("addEmailInput()")} className="btn btn-primary" type="button" id="add-email">+</button>
-                <br></br>
-                {volunteer.emails.map((email) => {
-                    return (
-                        <input key={email.email_id} value={email.email_address}></input>
-                    )
-                })}
-                <br></br>
-                <button className="btn btn-primary" type="submit">Submit</button>
-            </form>
-            <button onClick={() => handleDelete()} className="btn btn-danger">Delete</button>
+            <div className="cardLarge volunteerInfo">
+                <h1 className="mt-2">Edit Volunteer</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="upperForm">
+                        <div className="inputContainer">
+                            <label className="form-label" htmlFor="name">First Name</label>
+                            <input className="form-control" type="text" name="name" id="name"
+                                value={volunteer.first_name}
+                                onChange={(e) => setVolunteer({ ...volunteer, first_name: e.target.value })}
+                            />
+                        </div>
+                        <div className="inputContainer">
+                            <label className="form-label" htmlFor="last-name">Last Name</label>
+                            <input className="form-control" type="text" name="last-name" id="last-name"
+                                value={volunteer.last_name}
+                                onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
+                            />
+                        </div>
+                        <div className="inputContainer">
+                            <label className="form-label" htmlFor="preferred-contact-method">Preferred Contact</label>
+                            <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
+                                <option value="email">Email</option>
+                                <option value="phone">Phone</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="phonesContainer">
+                        <span className="addPhoneInput">
+                            <label htmlFor="add-phone">Phone</label>
+                            <button onClick={() => console.log("addPhoneInput()")} className="ms-2 addButton" type="button" id="add-phone">+</button>
+                        </span>
+                        <div className="phoneInputContainer">
+                            {volunteer.phones.map((phone) => {
+                                return (
+                                    <input className="mb-2 form-control" key={phone.phone_id} value={phone.phone_number}></input>
+                                )
+                            })}
+                        </div>
+                    </div>
+                    <div className="emailsContainer">
+                        <span className="addEmailInput">
+                            <label htmlFor="add-email">Email</label>
+                            <button onClick={() => console.log("addEmailInput()")} className="ms-2 addButton" type="button" id="add-email">+</button>
+                        </span>
+                        <div className="emailInputContainer">
+                            {volunteer.emails.map((email) => {
+                                return (
+                                    <input className="mb-2 form-control" key={email.email_id} value={email.email_address}></input>
+                                )
+                            })}
+                        </div>
+                    </div>
+                    <button className="mt-3 heroBtn" type="submit">Update</button>
+                </form>
+                <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
+            </div>
         </div>
     )
 }

@@ -1,0 +1,15 @@
+.inputContainer {
+    margin-top: .5rem;
+}
+
+.phonesContainer, .emailsContainer {
+    margin: .5rem 0;
+}
+
+.addPhoneInput, .addEmailInput {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin: .5rem 0;
+}
