@@ -1,0 +1,25 @@
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 3rem 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--accent-color);
+}
+
+.loginContainer form {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.loginInput {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin: .5rem 0;
+}
