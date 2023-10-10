@@ -38,10 +38,10 @@ export default function Events() {
             <HeroBtn route="/" text="back to dashboard" />
             <div className="eventsGrid">
                 <div className="eventsGridHeader">
-                    <span>event</span>
-                    <span>location</span>
-                    <span>time</span>
-                    <span>description</span>
+                    <span className="eventData">event</span>
+                    <span className="eventData">location</span>
+                    <span className="eventData">time</span>
+                    {/* <span>description</span> */}
                 </div>
 
                 {events.map(event => (
@@ -49,7 +49,7 @@ export default function Events() {
                         <span className="eventData">{event.event_name}</span>
                         <span className="eventData">{event.event_location}</span>
                         <span className="eventData">{event.event_date}</span>
-                        <span className="eventData">{event.event_description}</span>
+                        {/* <span className="eventData">{event.event_description}</span> */}
                     </div>
                 ))}
             </div>

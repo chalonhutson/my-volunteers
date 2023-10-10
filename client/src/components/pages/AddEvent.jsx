@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 
 import HeroBtn from '../buttons/HeroBtn'
 
+import '../../css/AddUpdateVolunteerEvent.css'
+
 export default function AddEvent() {
 
     const navigate = useNavigate()
@@ -42,19 +44,29 @@ export default function AddEvent() {
 
     return (
         <div>
-            <h1>Add Event</h1>
             <HeroBtn route="/events" text="back to events" />
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="event">Event</label>
-                <input ref={eventNameRef} className="form-control" type="text" name="event" id="event" />
-                <label htmlFor="location">Location</label>
-                <input ref={eventLocationRef} className="form-control" type="text" name="location" id="location" />
-                <label htmlFor="date">Date</label>
-                <input ref={eventDateRef} className="form-control" type="date" name="date" id="time" />
-                <label htmlFor="description">Description</label>
-                <textarea ref={eventDescriptionRef} className="form-control" name="description" id="description" cols="30" rows="10"></textarea>
-                <button className="btn btn-primary" type="submit">Submit</button>
-            </form>
+            <div className="cardLarge">
+                <h1 className="mt-2">Add Event</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="inputContainer">
+                        <label htmlFor="event">Event Name</label>
+                        <input ref={eventNameRef} className="form-control" type="text" name="event" id="event" />
+                    </div>
+                    <div className="inputContainer">
+                        <label htmlFor="location">Location</label>
+                        <input ref={eventLocationRef} className="form-control" type="text" name="location" id="location" />
+                    </div>
+                    <div className="inputContainer">
+                        <label htmlFor="date">Date</label>
+                        <input ref={eventDateRef} className="form-control" type="date" name="date" id="time" />
+                    </div>
+                    <div className="inputContainer">
+                        <label htmlFor="description">Description</label>
+                        <textarea ref={eventDescriptionRef} className="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                    </div>
+                    <button className="mt-3 heroBtn" type="submit">Submit</button>
+                </form>
+            </div>
         </div>
     )
 }

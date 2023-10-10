@@ -13,13 +13,17 @@ export default function AddVolunteer() {
         return phoneInputs.map((input, i) => {
             return (
                 <div key={i}>
-                    <label htmlFor="phone">Phone</label>
+                    <label className="form-label" htmlFor="phone">Phone</label>
                     <input className="form-control" type="text" name="phone" id="phone" defaultValue={input.value} />
                     <button onClick={() => removePhoneInput(i)} className="btn btn-danger">-</button>
                 </div>
             )
         }
         )
+    }
+
+    function renderEmailInputs() {
+        console.log("renderEmailInputs()")
     }
 
     const firstNameRef = useRef()
@@ -63,27 +67,45 @@ export default function AddVolunteer() {
 
 
     return (
-        <div>
+        <main>
             <Link to="/volunteers">
                 <button className="heroBtn">back to volunteers</button>
             </Link>
-            <h1>Add Volunteer</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="name">First Name</label>
-                <input ref={firstNameRef} className="form-control" type="text" name="name" id="name" />
-                <label htmlFor="last-name">Last Name</label>
-                <input ref={lastNameRef} className="form-control" type="text" name="last-name" id="last-name" />
-                <label htmlFor="preferred-contact">Preferred Contact</label>
-                <select ref={preferredContactRef} className="form-select" name="preferred-contact" id="preferred-contact">
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                </select>
-                <label htmlFor="add-phone">Phone</label>
-                <button onClick={() => addPhoneInput()} className="btn btn-primary" type="button" id="add-phone">+</button>
-                {renderPhoneInputs()}
-                <br></br>
-                <button className="btn btn-primary" type="submit">Submit</button>
-            </form>
-        </div>
+            <div className="cardLarge">
+                <h1 className="mt-2">Add Volunteer</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="inputContainer">
+                        <label htmlFor="name">First Name</label>
+                        <input ref={firstNameRef} className="form-control" type="text" name="name" id="name" />
+                    </div>
+                    <div className="inputContainer">
+                        <label htmlFor="last-name">Last Name</label>
+                        <input ref={lastNameRef} className="form-control" type="text" name="last-name" id="last-name" />
+                    </div>
+                    <div className="inputContainer">
+                        <label htmlFor="preferred-contact">Preferred Contact</label>
+                        <select ref={preferredContactRef} className="form-select" name="preferred-contact" id="preferred-contact">
+                            <option value="email">Email</option>
+                            <option value="phone">Phone</option>
+                        </select>
+                    </div>
+                    <div className="inputContainer">
+                        <span className="addPhoneInput">
+                            <label htmlFor="add-phone">Phone</label>
+                            <button onClick={() => console.log("addPhoneInput()")} className="ms-2 addButton" type="button" id="add-phone">+</button>
+                        </span>
+                        {renderPhoneInputs()}
+                    </div>
+                    <div className="inputContainer">
+                        <span className="addEmailInput">
+                            <label htmlFor="add-email">Email</label>
+                            <button onClick={() => console.log("addEmailInput()")} className="ms-2 addButton" type="button" id="add-email">+</button>
+                        </span>
+                        {renderEmailInputs()}
+                    </div>
+                    <button className="mt-2 heroBtn" type="submit">Submit</button>
+                </form>
+            </div>
+        </main>
     )
 }

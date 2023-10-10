@@ -4,6 +4,8 @@ import { redirect, useNavigate } from "react-router-dom"
 
 import { toast } from 'react-toastify'
 
+import "../../css/Login.css"
+
 export default function Login() {
 
     const emailRef = useRef()
@@ -50,18 +52,33 @@ export default function Login() {
 
     return (
         <div>
-            <h1>Login</h1>
-            <form onSubmit={(e) => loginHandler(e)}>
-                <label htmlFor="email">Email</label>
-                <input ref={emailRef} type="email" name="email" id="email" placeholder="Enter your email" />
-                <br></br>
-                <br></br>
-                <label htmlFor="password">Password</label>
-                <input ref={passwordRef} type="password" name="password" id="password" placeholder="Enter your password" />
-                <br></br>
-                <br></br>
-                <button className="btn btn-primary" type="submit">Login</button>
-            </form>
+            <div className="loginContainer">
+                <h1>Login</h1>
+                <form onSubmit={(e) => loginHandler(e)}>
+                    <div className="loginInput">
+                        <label className="form-label" htmlFor="email">Email</label>
+                        <input
+                            className="form-control"
+                            ref={emailRef}
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Enter your email"
+                        />
+                    </div>
+                    <div className="loginInput">
+                        <label className="form-label" htmlFor="password">Password</label>
+                        <input
+                            className="form-control"
+                            ref={passwordRef}
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Enter your password" />
+                    </div>
+                    <button className="mt-3 btn btn-primary" type="submit">Login</button>
+                </form>
+            </div>
         </div>
     )
 }

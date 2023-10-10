@@ -7,17 +7,27 @@
 
 .volunteersGridRow, .volunteersGridHeader {
     display: grid;
-    grid-template-columns: 1fr 1.25fr .75fr;
-    outline: black 1px solid;
+    grid-template-columns: .75fr 2fr 1fr;
+    margin: .5rem 0;
     font-size: .75rem;
+    border-radius: 1rem;
+    padding: .5rem .25rem;
 }
 
-
-.volunteersGridRow:hover {
-    cursor: pointer;
+.volunteersGridRow {
     background-color: var(--background-color);
 }
 
+.volunteersGridRow:hover {
+    filter: brightness(.9);
+    cursor: pointer;
+}
+
+.volunteerName, .volunteerContact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .volunteerImage {
     width: 3rem;
@@ -32,4 +42,10 @@
 
 .volunteerContact {
     font-size: .5rem;
+}
+
+.volunteerHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
