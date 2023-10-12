@@ -6,7 +6,7 @@
     margin: .5rem 0;
 }
 
-.addPhoneInput, .addEmailInput {
+.addPhoneInput, .addEmailInput, .addNoteInput {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
