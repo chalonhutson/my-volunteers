@@ -84,7 +84,7 @@ export default function UpdateVolunteer() {
 
 
     return (
-        <div>
+        <main>
             <Link to="/volunteers">
                 <button className="heroBtn">back to volunteers</button>
             </Link>
@@ -145,6 +145,6 @@ export default function UpdateVolunteer() {
                 </form>
                 <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
             </div>
-        </div>
+        </main>
     )
 }

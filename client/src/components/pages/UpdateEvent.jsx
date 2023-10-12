@@ -81,7 +81,7 @@ export default function UpdateEvent() {
     }
 
     return (
-        <div>
+        <main>
             <HeroBtn route="/events" text="back to events" />
             <div className="cardLarge">
                 <h1 className="mt-2">Edit Event</h1>
@@ -118,6 +118,6 @@ export default function UpdateEvent() {
                 </form>
                 <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
             </div>
-        </div>
+        </main>
     )
 }

@@ -51,7 +51,7 @@ export default function Login() {
     }
 
     return (
-        <div>
+        <main>
             <div className="loginContainer">
                 <h1>Login</h1>
                 <form onSubmit={(e) => loginHandler(e)}>
@@ -79,6 +79,6 @@ export default function Login() {
                     <button className="mt-3 btn btn-primary" type="submit">Login</button>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }
