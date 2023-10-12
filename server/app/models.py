@@ -12,6 +12,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(99), nullable=False, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     volunteers = db.relationship("Volunteer", back_populates="user", lazy=True)
     events = db.relationship("Event", back_populates="user", lazy=True)
@@ -37,11 +38,13 @@ class Volunteer(db.Model):
     image_url = db.Column(db.String(500), nullable=True)
     preferred_contact = db.Column(db.String(20), nullable=False, default="none")
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     user = db.relationship("User", back_populates="volunteers", lazy=True)
 
     phones = db.relationship("Phone", back_populates="volunteer", lazy=True)
     emails = db.relationship("Email", back_populates="volunteer", lazy=True)
+    notes = db.relationship("VolunteerNote", back_populates="volunteer", lazy=True)
 
     def __init__(self, first_name, last_name, user_id , preferred_contact, image_url=None):
         self.first_name = first_name
@@ -91,6 +94,7 @@ class Event(db.Model):
     event_description = db.Column(db.String(500), nullable=False)
     event_location = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     user = db.relationship("User", back_populates="events", lazy=True)
 
@@ -120,6 +124,7 @@ class Phone(db.Model):
     phone_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     phone_number = db.Column(db.String(20), nullable=False)
     volunteer_id = db.Column(db.Integer, db.ForeignKey("volunteers.volunteer_id"), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     volunteer = db.relationship("Volunteer", back_populates="phones", lazy=True)
 
@@ -142,6 +147,7 @@ class Email(db.Model):
     email_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email_address = db.Column(db.String(99), nullable=False)
     volunteer_id = db.Column(db.Integer, db.ForeignKey("volunteers.volunteer_id"), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     volunteer = db.relationship("Volunteer", back_populates="emails", lazy=True)
 
@@ -158,7 +164,28 @@ class Email(db.Model):
             "email_address": self.email_address
         }
 
+class VolunteerNote(db.Model):
+    __tablename__ = "volunteer_notes"
 
+    note_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.String(9999), nullable=False)
+    volunteer_id = db.Column(db.Integer, db.ForeignKey("volunteers.volunteer_id"), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    volunteer = db.relationship("Volunteer", back_populates="notes", lazy=True)
+
+    def __init__(self, content, volunteer):
+        self.content = content
+        self.volunteer = volunteer
+
+    def __repr__(self):
+        return f"<VolunteerNote {self.note_id}>"
+
+    def get_dict(self):
+        return {
+            "note_id": self.note_id,
+            "content": self.content
+        }
 
 
 # Existing code...
@@ -216,6 +243,28 @@ def populate_database():
     ]
 
     db.session.add_all(events)
+    db.session.commit()
+
+    # Add some notes
+    volunteers_user1_notes = [
+        VolunteerNote("Won the Hunger Games", volunteers_user1[0]),
+        VolunteerNote("Won the Hunger Games", volunteers_user1[1]),
+        VolunteerNote("Mentor for Katniss", volunteers_user1[2]),
+        VolunteerNote("Stylist for Katniss", volunteers_user1[3]),
+        VolunteerNote("Mentor for Katniss", volunteers_user1[4]),
+        VolunteerNote("Won the Hunger Games way way back when.", volunteers_user1[4]),
+        VolunteerNote("Hunts with Katniss", volunteers_user1[5]),
+    ]
+
+    volunteers_user2_notes = [
+        VolunteerNote("Propane salesman", volunteers_user2[0]),
+        VolunteerNote("Son of Hank", volunteers_user2[1]),
+        VolunteerNote("Conspiracy theorist", volunteers_user2[2]),
+        VolunteerNote("Army barber", volunteers_user2[3]),
+        VolunteerNote("Substitute teacher", volunteers_user2[4]),
+    ]
+
+    db.session.add_all(volunteers_user1_notes + volunteers_user2_notes)
     db.session.commit()
 
 

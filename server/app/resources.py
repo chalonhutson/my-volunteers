@@ -4,8 +4,8 @@ from flask_restx import Resource, Namespace
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
 from .extensions import db
-from .api_models import login_model
-from .models import User, Volunteer, Event, Phone, Email
+from .api_models import login_model, volunteer_note_model
+from .models import User, Volunteer, Event, Phone, Email, VolunteerNote
 
 authorizations = {
     "jsonWebToken": {
@@ -80,6 +80,7 @@ class VolunteerById(Resource):
         volunteer_dict = volunteer.get_dict()
         volunteer_dict["phones"] = [phone.get_dict() for phone in volunteer.phones]
         volunteer_dict["emails"] = [email.get_dict() for email in volunteer.emails]
+        volunteer_dict["notes"] = [note.get_dict() for note in volunteer.notes]
 
         return volunteer_dict
 
@@ -174,3 +175,21 @@ class EventById(Resource):
         db.session.commit()
 
         return {"res": "Event deleted successfully"}
+
+@ns.route("/volunteers/notes/<int:volunteer_id>")
+class VolunteerNotes(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    @ns.expect(volunteer_note_model)
+    def post(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to add notes to this volunteer"}, 401
+
+        note = VolunteerNote(ns.payload["content"], volunteer)
+        volunteer.notes.append(note)
+        db.session.commit()
+
+        return {"res": "Note added successfully"}
