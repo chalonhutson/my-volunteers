@@ -17,7 +17,8 @@ export default function UpdateVolunteer() {
             contact: "none"
         },
         phones: [],
-        emails: []
+        emails: [],
+        notes: []
     })
 
     const { volunteerId } = useParams()
