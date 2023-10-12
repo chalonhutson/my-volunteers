@@ -141,6 +141,19 @@ export default function UpdateVolunteer() {
                             })}
                         </div>
                     </div>
+                    <div className="notesContainer">
+                        <span className="addNoteInput">
+                            <label htmlFor="add-note">Note</label>
+                            <button onClick={() => console.log("addNoteInput()")} className="ms-2 addButton" type="button" id="add-note">+</button>
+                        </span>
+                        <div className="noteInputContainer">
+                            {volunteer.notes.map((note) => {
+                                return (
+                                    <input className="mb-2 form-control" key={note.note_id} value={note.content}></input>
+                                )
+                            })}
+                        </div>
+                    </div>
                     <button className="mt-3 heroBtn" type="submit">Update</button>
                 </form>
                 <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
