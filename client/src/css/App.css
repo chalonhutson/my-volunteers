@@ -25,11 +25,10 @@ body {
 
 main {
     background-color: var(--background-color);
-
-}
-
-table, th, td, tr {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 button {
@@ -54,6 +53,8 @@ button {
     border-radius: 1rem;
     padding: .5rem 1rem;
     margin: .5rem .5rem;
+    width: 90%;
+    max-width: 40em;
 }
 
 .cardLarge h1 {

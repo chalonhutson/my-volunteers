@@ -7,7 +7,7 @@ import headshot_19 from "../../assets/headshots/headshot_19.jpg"
 
 export default function Dashboard() {
     return (
-        <div>
+        <main>
             <div className="cardLarge">
                 <h1>TOP VOLUNTEERS - JULY</h1>
                 <div className="cardLargeItem">
@@ -46,6 +46,6 @@ export default function Dashboard() {
                     <button className="heroBtn">view events</button>
                 </Link>
             </div>
-        </div>
+        </main>
     )
 }
