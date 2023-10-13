@@ -2,6 +2,8 @@ import { Link, useParams, useNavigate } from "react-router-dom"
 import { useRef, useState, useEffect } from "react"
 import { useAuthHeader } from "react-auth-kit"
 
+import { toast } from 'react-toastify'
+
 import "../../css/AddUpdateVolunteerEvent.css"
 
 export default function UpdateVolunteer() {
@@ -25,6 +27,10 @@ export default function UpdateVolunteer() {
 
 
     useEffect(() => {
+        getUpdatedVolunteer()
+    }, [])
+
+    function getUpdatedVolunteer() {
         fetch(`/api/volunteers/${volunteerId}`, {
             method: "GET",
             headers: {
@@ -36,32 +42,43 @@ export default function UpdateVolunteer() {
                 res.json()
             )
             .then((data) => {
-                setVolunteer(data)
-            })
-    }, [])
-
-
-    function handleSubmit(e) {
-        e.preventDefault()
-        fetch(`/api/volunteers/${volunteerId}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": authHeader(),
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(volunteer)
-        })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error("Network response was not ok")
+                let volunteer = data
+                volunteer.phones = data.phones.map((phone) => {
+                    return {
+                        phone_id: phone.phone_id,
+                        phone_number: phone.phone_number,
+                        is_edited: false,
+                        is_updated: false,
+                        is_new: false
+                    }
                 }
-                return res.json()
-            })
-            .then((data) => {
-                console.log(data)
-                navigate("/volunteers")
+                )
+                setVolunteer(volunteer)
             })
     }
+
+    // function handleSubmit(e) {
+    //     e.preventDefault()
+    //     fetch(`/api/volunteers/${volunteerId}`, {
+    //         method: "PUT",
+    //         headers: {
+    //             "Authorization": authHeader(),
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(volunteer)
+    //     })
+    //         .then((res) => {
+    //             if (!res.ok) {
+    //                 toast.error("There was an error updating the volunteer.")
+    //                 throw new Error("Network response was not ok")
+    //             }
+    //             return res.json()
+    //         })
+    //         .then((data) => {
+    //             console.log(data)
+    //             navigate("/volunteers")
+    //         })
+    // }
 
     function handleDelete() {
         fetch(`/api/volunteers/${volunteerId}`, {
@@ -78,8 +95,193 @@ export default function UpdateVolunteer() {
                 return res.json()
             })
             .then((data) => {
+                // console.log(data)
+                getUpdatedVolunteer()
+            })
+    }
+
+    function addPhoneInput() {
+        setVolunteer(
+            {
+                ...volunteer,
+                phones: [...volunteer.phones, {
+                    phone_id: null,
+                    phone_number: "",
+                    is_new: true,
+                }]
+            }
+        )
+    }
+
+    function handleAddPhoneConfirm() {
+        const newPhone = volunteer.phones.find((p) => p.is_new)
+
+        fetch(`/api/volunteers/${volunteerId}/phones`, {
+            method: "POST",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newPhone)
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error adding the phone number.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Phone number added.")
+                getUpdatedVolunteer()
+                // console.log(data)
+            })
+
+        setVolunteer(
+            {
+                ...volunteer,
+                phones: volunteer.phones.map((p) => {
+                    if (p.is_new) {
+                        return (
+                            {
+                                ...p,
+                                is_new: false
+                            }
+                        )
+                    } else {
+                        return p
+                    }
+                }
+                )
+            }
+        )
+    }
+
+    function handlePhoneIsEdited(e, phone_id, value) {
+        e.preventDefault()
+        console.log("update phone")
+
+        if (value) {
+            setVolunteer(
+                {
+                    ...volunteer,
+                    phones: volunteer.phones.map((p) => {
+                        if (p.phone_id === phone_id) {
+                            return (
+                                {
+                                    ...p,
+                                    is_edited: value,
+                                    previous_phone_number: p.phone_number
+                                }
+                            )
+                        } else {
+                            return (
+                                {
+                                    ...p,
+                                    is_edited: false
+                                }
+                            )
+                        }
+                    }
+                    )
+                }
+            )
+        } else {
+            setVolunteer(
+                {
+                    ...volunteer,
+                    phones: volunteer.phones.map((p) => {
+                        if (p.phone_id === phone_id) {
+                            return (
+                                {
+                                    ...p,
+                                    phone_number: p.previous_phone_number,
+                                    is_edited: value
+                                }
+                            )
+                        } else {
+                            return (
+                                {
+                                    ...p,
+                                    is_edited: false
+                                }
+                            )
+                        }
+                    }
+                    )
+                }
+            )
+        }
+    }
+
+    function handlePhoneUpdateConfirm(e, phone_id) {
+        e.preventDefault()
+        console.log("update phone confirm")
+        setVolunteer(
+            {
+                ...volunteer,
+                phones: volunteer.phones.map((p) => {
+                    if (p.phone_id === phone_id) {
+                        return (
+                            {
+                                ...p,
+                                is_updated: true
+                            }
+                        )
+                    } else {
+                        return p
+                    }
+                }
+                )
+            }
+        )
+
+        fetch(`/api/volunteers/phones/${phone_id}`, {
+
+            method: "PUT",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(volunteer.phones.find((p) => p.phone_id === phone_id))
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error updating the phone number.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Phone number updated.")
+                getUpdatedVolunteer()
                 console.log(data)
-                navigate("/volunteers")
+            })
+
+        handlePhoneIsEdited(e, phone_id, false)
+    }
+
+    function handleDeletePhone(e, phone_id) {
+        e.preventDefault()
+        console.log("delete phone")
+        fetch(`/api/volunteers/phones/${phone_id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error deleting the phone number.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Phone number deleted.")
+                getUpdatedVolunteer()
+                console.log(data)
             })
     }
 
@@ -91,74 +293,171 @@ export default function UpdateVolunteer() {
             </Link>
             <div className="cardLarge volunteerInfo">
                 <h1 className="mt-2">Edit Volunteer</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="upperForm">
-                        <div className="inputContainer">
-                            <label className="form-label" htmlFor="name">First Name</label>
-                            <input className="form-control" type="text" name="name" id="name"
-                                value={volunteer.first_name}
-                                onChange={(e) => setVolunteer({ ...volunteer, first_name: e.target.value })}
-                            />
-                        </div>
-                        <div className="inputContainer">
-                            <label className="form-label" htmlFor="last-name">Last Name</label>
-                            <input className="form-control" type="text" name="last-name" id="last-name"
-                                value={volunteer.last_name}
-                                onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
-                            />
-                        </div>
-                        <div className="inputContainer">
-                            <label className="form-label" htmlFor="preferred-contact-method">Preferred Contact</label>
-                            <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
-                                <option value="email">Email</option>
-                                <option value="phone">Phone</option>
-                                <option value="none">None</option>
-                            </select>
-                        </div>
+                {/* <form onSubmit={handleSubmit}> */}
+                <div className="upperForm">
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="name">First Name</label>
+                        <input className="form-control" type="text" name="name" id="name"
+                            value={volunteer.first_name}
+                            onChange={(e) => setVolunteer({ ...volunteer, first_name: e.target.value })}
+                        />
                     </div>
-                    <div className="phonesContainer">
-                        <span className="addPhoneInput">
-                            <label htmlFor="add-phone">Phone</label>
-                            <button onClick={() => console.log("addPhoneInput()")} className="ms-2 addButton" type="button" id="add-phone">+</button>
-                        </span>
-                        <div className="phoneInputContainer">
-                            {volunteer.phones.map((phone) => {
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="last-name">Last Name</label>
+                        <input className="form-control" type="text" name="last-name" id="last-name"
+                            value={volunteer.last_name}
+                            onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
+                        />
+                    </div>
+                    <div className="inputContainer">
+                        <label className="form-label" htmlFor="preferred-contact-method">Preferred Contact</label>
+                        <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
+                            <option value="email">Email</option>
+                            <option value="phone">Phone</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                </div>
+                <div className="phonesContainer">
+                    <span className="addPhoneInput">
+                        <label htmlFor="add-phone">Phone</label>
+                        <button onClick={() => addPhoneInput()} className="ms-2 addButton" type="button" id="add-phone">+</button>
+                    </span>
+                    <div className="phoneInputContainer">
+                        {volunteer.phones.map((phone) => {
+                            if (phone.is_edited) {
                                 return (
-                                    <input className="mb-2 form-control" key={phone.phone_id} value={phone.phone_number}></input>
+                                    <span className="d-flex flex-row align-items-center ms-3 mb-3" key={phone.phone_id}>
+                                        <input
+                                            className="form-control"
+                                            value={phone.phone_number}
+                                            onChange={(e) => {
+                                                console.log(volunteer.phones); setVolunteer(
+                                                    {
+                                                        ...volunteer,
+                                                        phones: volunteer.phones.map((p) => {
+                                                            if (p.is_edited) {
+                                                                return (
+                                                                    {
+                                                                        ...p,
+                                                                        phone_number: e.target.value
+                                                                    }
+                                                                )
+                                                            } else {
+                                                                return p
+                                                            }
+                                                        }
+                                                        )
+                                                    }
+                                                )
+                                            }}
+                                        ></input>
+                                        <span className="d-flex flex-row align-items-center">
+                                            <button
+                                                onClick={(e) => handlePhoneUpdateConfirm(e, phone.phone_id)}
+                                                className="btn btn-sm btn-success ms-3"
+                                                style={{ padding: "0 .5rem", height: "25px" }}
+                                            >
+                                                update
+                                            </button>
+                                            <button
+                                                onClick={(e) => handlePhoneIsEdited(e, phone.phone_id, false)}
+                                                className="btn btn-sm btn-danger ms-1"
+                                                style={{ padding: "0 .5rem", height: "25px" }}
+                                            >
+                                                cancel
+                                            </button>
+                                        </span>
+                                    </span>
                                 )
-                            })}
-                        </div>
-                    </div>
-                    <div className="emailsContainer">
-                        <span className="addEmailInput">
-                            <label htmlFor="add-email">Email</label>
-                            <button onClick={() => console.log("addEmailInput()")} className="ms-2 addButton" type="button" id="add-email">+</button>
-                        </span>
-                        <div className="emailInputContainer">
-                            {volunteer.emails.map((email) => {
+                            } else if (phone.is_new) {
                                 return (
-                                    <input className="mb-2 form-control" key={email.email_id} value={email.email_address}></input>
+                                    <span className="d-flex flex-row ms-3" key={phone.phone_id}
+                                    >
+                                        <input
+                                            className="form-control"
+                                            value={phone.phone_number}
+                                            onChange={(e) => setVolunteer(
+                                                {
+                                                    ...volunteer,
+                                                    phones: volunteer.phones.map((p) => {
+                                                        if (p.is_new) {
+                                                            return (
+                                                                {
+                                                                    ...p,
+                                                                    phone_number: e.target.value
+                                                                }
+                                                            )
+                                                        } else {
+                                                            return p
+                                                        }
+                                                    }
+                                                    )
+                                                }
+                                            )}
+                                        ></input>
+                                        <span className="ms-3">
+                                            <button
+                                                onClick={() => handleAddPhoneConfirm()}
+                                                className="btn btn-sm btn-success"
+                                                style={{ padding: "0 .5rem", height: "25px", marginLeft: ".5rem" }}
+                                            >confirm</button>
+                                        </span>
+                                    </span>
                                 )
-                            })}
-                        </div>
-                    </div>
-                    <div className="notesContainer">
-                        <span className="addNoteInput">
-                            <label htmlFor="add-note">Note</label>
-                            <button onClick={() => console.log("addNoteInput()")} className="ms-2 addButton" type="button" id="add-note">+</button>
-                        </span>
-                        <div className="noteInputContainer">
-                            {volunteer.notes.map((note) => {
+                            } else {
                                 return (
-                                    <input className="mb-2 form-control" key={note.note_id} value={note.content}></input>
+                                    <span className="d-flex flex-row ms-3" key={phone.phone_id}
+                                    >
+                                        <p>{phone.phone_number}</p>
+                                        <span className="ms-3">
+                                            <button
+                                                onClick={(e) => handlePhoneIsEdited(e, phone.phone_id, true)}
+                                                className="btn btn-sm btn-warning"
+                                                style={{ padding: "0 .5rem", height: "25px" }}
+                                            >edit</button>
+                                            <button
+                                                onClick={(e) => handleDeletePhone(e, phone.phone_id)}
+                                                className="btn btn-sm btn-danger"
+                                                style={{ padding: "0 .5rem", height: "25px", marginLeft: ".5rem" }}
+                                            >delete</button>
+                                        </span>
+                                    </span>
                                 )
-                            })}
-                        </div>
+                            }
+                        })}
                     </div>
-                    <button className="mt-3 heroBtn" type="submit">Update</button>
-                </form>
+                </div>
+                <div className="emailsContainer">
+                    <span className="addEmailInput">
+                        <label htmlFor="add-email">Email</label>
+                        <button onClick={() => console.log("addEmailInput()")} className="ms-2 addButton" type="button" id="add-email">+</button>
+                    </span>
+                    <div className="emailInputContainer">
+                        {volunteer.emails.map((email) => {
+                            return (
+                                <input className="mb-2 form-control" key={email.email_id} value={email.email_address}></input>
+                            )
+                        })}
+                    </div>
+                </div>
+                <div className="notesContainer">
+                    <span className="addNoteInput">
+                        <label htmlFor="add-note">Note</label>
+                        <button onClick={() => console.log("addNoteInput()")} className="ms-2 addButton" type="button" id="add-note">+</button>
+                    </span>
+                    <div className="noteInputContainer">
+                        {volunteer.notes.map((note) => {
+                            return (
+                                <input className="mb-2 form-control" key={note.note_id} value={note.content}></input>
+                            )
+                        })}
+                    </div>
+                </div>
+                <button className="mt-3 heroBtn">Update</button>
+                {/* </form> */}
                 <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
-            </div>
-        </main>
+            </div >
+        </main >
     )
 }
