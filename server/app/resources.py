@@ -193,3 +193,46 @@ class VolunteerNotes(Resource):
         db.session.commit()
 
         return {"res": "Note added successfully"}
+
+@ns.route("/volunteers/<int:volunteer_id>/phones")
+class VolunteerPhones(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def post(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to add phones to this volunteer"}, 401
+
+        phone = Phone(ns.payload["phone_number"], volunteer)
+        volunteer.phones.append(phone)
+        db.session.commit()
+
+        return {"res": "Phone number added successfully"}
+
+@ns.route("/volunteers/phones/<int:phone_id>")
+class VolunteerPhoneById(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def put(self, phone_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        phone = Phone.query.get(phone_id)
+        if phone.volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to change this phone number"}, 401
+        phone.phone_number = ns.payload["phone_number"]
+        db.session.commit()
+
+        return {"res": "Phone number updated successfully"}
+
+    @ns.doc(security="jsonWebToken")
+    def delete(self, phone_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        phone = Phone.query.get(phone_id)
+        if phone.volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to delete this phone number"}, 401
+        db.session.delete(phone)
+        db.session.commit()
+
+        return {"res": "Phone number deleted successfully"}
