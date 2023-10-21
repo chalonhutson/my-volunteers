@@ -176,7 +176,7 @@ class EventById(Resource):
 
         return {"res": "Event deleted successfully"}
 
-@ns.route("/volunteers/notes/<int:volunteer_id>")
+@ns.route("/volunteers/<int:volunteer_id>/notes")
 class VolunteerNotes(Resource):
     method_decorators = [jwt_required()]
 
@@ -193,6 +193,33 @@ class VolunteerNotes(Resource):
         db.session.commit()
 
         return {"res": "Note added successfully"}
+
+@ns.route("/volunteers/notes/<int:note_id>")
+class VolunteerNoteById(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    @ns.expect(volunteer_note_model)
+    def put(self, note_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        note = VolunteerNote.query.get(note_id)
+        if note.volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to change this note"}, 401
+        note.content = ns.payload["content"]
+        db.session.commit()
+
+        return {"res": "Note updated successfully"}
+
+    @ns.doc(security="jsonWebToken")
+    def delete(self, note_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        note = VolunteerNote.query.get(note_id)
+        if note.volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to delete this note"}, 401
+        db.session.delete(note)
+        db.session.commit()
+
+        return {"res": "Note deleted successfully"}
 
 @ns.route("/volunteers/<int:volunteer_id>/phones")
 class VolunteerPhones(Resource):

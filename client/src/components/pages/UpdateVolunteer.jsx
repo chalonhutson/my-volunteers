@@ -45,14 +45,34 @@ export default function UpdateVolunteer() {
                 let volunteer = data
                 volunteer.phones = data.phones.map((phone) => {
                     return {
-                        phone_id: phone.phone_id,
-                        phone_number: phone.phone_number,
+                        ...phone,
                         is_edited: false,
                         is_updated: false,
                         is_new: false
                     }
                 }
                 )
+
+                volunteer.emails = data.emails.map((email) => {
+                    return {
+                        ...email,
+                        is_edited: false,
+                        is_updated: false,
+                        is_new: false
+                    }
+                }
+                )
+
+                volunteer.notes = data.notes.map((note) => {
+                    return {
+                        ...note,
+                        is_edited: false,
+                        is_updated: false,
+                        is_new: false
+                    }
+                }
+                )
+
                 setVolunteer(volunteer)
             })
     }
@@ -728,6 +748,302 @@ export default function UpdateVolunteer() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    // Notes functionality
+
+    function addNoteInput() {
+        setVolunteer(
+            {
+                ...volunteer,
+                notes: [...volunteer.notes, {
+                    note_id: null,
+                    content: "",
+                    is_new: true,
+                }]
+            }
+        )
+    }
+
+    function handleAddNoteConfirm() {
+        // Add note to component state
+        const newNote = volunteer.notes.find((n) => n.is_new)
+
+        fetch(`/api/volunteers/${volunteerId}/notes`, {
+            method: "POST",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newNote)
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error adding the note.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Note added.")
+                getUpdatedVolunteer()
+                // console.log(data)
+            })
+    }
+
+    function handleNoteIsEdited(e, note_id, value) {
+        e.preventDefault()
+        console.log("update note")
+
+        if (value) {
+            setVolunteer(
+                {
+                    ...volunteer,
+                    notes: volunteer.notes.map((n) => {
+                        if (n.note_id === note_id) {
+                            return (
+                                {
+                                    ...n,
+                                    is_edited: value,
+                                    previous_content: n.content
+                                }
+                            )
+                        } else {
+                            return (
+                                {
+                                    ...n,
+                                    is_edited: false
+                                }
+                            )
+                        }
+                    }
+                    )
+                }
+            )
+        } else {
+            setVolunteer(
+                {
+                    ...volunteer,
+                    notes: volunteer.notes.map((n) => {
+                        if (n.note_id === note_id) {
+                            return (
+                                {
+                                    ...n,
+                                    content: n.previous_content,
+                                    is_edited: value
+                                }
+                            )
+                        } else {
+                            return (
+                                {
+                                    ...n,
+                                    is_edited: false
+                                }
+                            )
+                        }
+                    }
+                    )
+                }
+            )
+        }
+    }
+
+    function handleNoteUpdateConfirm(e, note_id) {
+        e.preventDefault()
+        console.log("update note confirm")
+        setVolunteer(
+            {
+                ...volunteer,
+                notes: volunteer.notes.map((n) => {
+                    if (n.note_id === note_id) {
+                        return (
+                            {
+                                ...n,
+                                is_updated: true
+                            }
+                        )
+                    } else {
+                        return n
+                    }
+                }
+                )
+            }
+        )
+
+        fetch(`/api/volunteers/notes/${note_id}`, {
+
+            method: "PUT",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(volunteer.notes.find((n) => n.note_id === note_id))
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error updating the note.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Note updated.")
+                getUpdatedVolunteer()
+                console.log(data)
+            })
+
+        handleNoteIsEdited(e, note_id, false)
+    }
+
+    function handleDeleteNote(e, note_id) {
+        console.log("delete note")
+
+        fetch(`/api/volunteers/notes/${note_id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error deleting the note.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Note deleted.")
+                getUpdatedVolunteer()
+                console.log(data)
+            })
+    }
+
+    function getNotes() {
+        return volunteer.notes.map((note) => {
+            if (note.is_edited) {
+                return (
+                    <span className="d-flex flex-row align-items-center ms-3 mb-3" key={note.note_id}>
+                        <input
+                            className="form-control"
+                            value={note.content}
+                            onChange={(e) => {
+                                console.log(volunteer.notes); setVolunteer(
+                                    {
+                                        ...volunteer,
+                                        notes: volunteer.notes.map((n) => {
+                                            if (n.is_edited) {
+                                                return (
+                                                    {
+                                                        ...n,
+                                                        content: e.target.value
+                                                    }
+                                                )
+                                            } else {
+                                                return n
+                                            }
+                                        }
+                                        )
+                                    }
+                                )
+                            }}
+                        ></input>
+                        <span className="d-flex flex-row align-items-center">
+                            <button
+                                onClick={(e) => handleNoteUpdateConfirm(e, note.note_id)}
+                                className="btn btn-sm btn-success ms-3"
+                                style={{ padding: "0 .5rem", height: "25px" }}
+                            >
+                                update
+                            </button>
+                            <button
+                                onClick={(e) => handleNoteIsEdited(e, note.note_id, false)}
+                                className="btn btn-sm btn-danger ms-1"
+                                style={{ padding: "0 .5rem", height: "25px" }}
+                            >
+                                cancel
+                            </button>
+                        </span>
+                    </span>
+                )
+            } else if (note.is_new) {
+                return (
+                    <span className="d-flex flex-row ms-3" key={note.note_id}
+                    >
+                        <input
+                            className="form-control"
+                            value={note.content}
+                            onChange={(e) => setVolunteer(
+                                {
+                                    ...volunteer,
+                                    notes: volunteer.notes.map((n) => {
+                                        if (n.is_new) {
+                                            return (
+                                                {
+                                                    ...n,
+                                                    content: e.target.value
+                                                }
+                                            )
+                                        } else {
+                                            return n
+                                        }
+                                    }
+                                    )
+                                }
+                            )}
+                        ></input>
+                        <span className="ms-3">
+                            <button
+                                onClick={() => handleAddNoteConfirm()}
+                                className="btn btn-sm btn-success"
+                                style={{ padding: "0 .5rem", height: "25px", marginLeft: ".5rem" }}
+                            >confirm</button>
+                        </span>
+                    </span>
+                )
+            }
+            else {
+                return (
+                    <span className="d-flex flex-row ms-3" key={note.note_id}
+                    >
+                        <p>{note.content}</p>
+                        <span className="ms-3">
+                            <button
+                                onClick={(e) => handleNoteIsEdited(e, note.note_id, true)}
+                                className="btn btn-sm btn-warning"
+                                style={{ padding: "0 .5rem", height: "25px" }}
+                            >edit</button>
+                            <button
+                                onClick={(e) => handleDeleteNote(e, note.note_id)}
+                                className="btn btn-sm btn-danger"
+                                style={{ padding: "0 .5rem", height: "25px", marginLeft: ".5rem" }}
+                            >delete</button>
+                        </span>
+                    </span>
+                )
+
+            }
+        })
+    }
+
+
+
+
+
+
+
+
+
     // Component return
 
     return (
@@ -783,19 +1099,10 @@ export default function UpdateVolunteer() {
                 <div className="notesContainer">
                     <span className="addNoteInput">
                         <label htmlFor="add-note">Note</label>
-                        <button onClick={() => console.log("addNoteInput()")} className="ms-2 addButton" type="button" id="add-note">+</button>
+                        <button onClick={() => addNoteInput()} className="ms-2 addButton" type="button" id="add-note">+</button>
                     </span>
                     <div className="noteInputContainer">
-                        {volunteer.notes.map((note) => {
-                            return (
-                                <input
-                                    className="mb-2 form-control"
-                                    key={note.note_id}
-                                // value={note.content}
-                                >
-                                </input>
-                            )
-                        })}
+                        {getNotes()}
                     </div>
                 </div>
                 <button className="mt-3 heroBtn">Update</button>
