@@ -236,3 +236,47 @@ class VolunteerPhoneById(Resource):
         db.session.commit()
 
         return {"res": "Phone number deleted successfully"}
+
+@ns.route("/volunteers/<int:volunteer_id>/emails")
+class VolunteerEmails(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def post(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to add emails to this volunteer"}, 401
+
+        email = Email(ns.payload["email_address"], volunteer)
+        print(email)
+        volunteer.emails.append(email)
+        db.session.commit()
+
+        return {"res": "Email added successfully"}
+
+@ns.route("/volunteers/emails/<int:email_id>")
+class VolunteerEmailById(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def put(self, email_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        email = Email.query.get(email_id)
+        if email.volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to change this email"}, 401
+        email.email_address = ns.payload["email_address"]
+        db.session.commit()
+
+        return {"res": "Email updated successfully"}
+
+    @ns.doc(security="jsonWebToken")
+    def delete(self, email_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        email = Email.query.get(email_id)
+        if email.volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to delete this email"}, 401
+        db.session.delete(email)
+        db.session.commit()
+
+        return {"res": "Email deleted successfully"}
