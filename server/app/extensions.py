@@ -3,7 +3,7 @@ from flask_restx import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
-api = Api()
+api = Api(doc=False)
 db = SQLAlchemy()
 jwt = JWTManager()
 cors = CORS()

@@ -19,7 +19,7 @@ export default function Login() {
         const password = passwordRef.current.value
         console.log("attempting login")
 
-        fetch("http://localhost:5000/api/login", {
+        fetch("/api/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
