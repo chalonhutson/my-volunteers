@@ -17,6 +17,26 @@ authorizations = {
 
 ns = Namespace("api", authorizations=authorizations)
 
+
+""" Create new user. """
+@ns.route("/users")
+class Users(Resource):
+
+    def post(self):
+        print("triggered")
+        email = ns.payload["email"]
+        password = ns.payload["password"]
+
+        if User.query.filter_by(email=email).first():
+            return {"res": "User already exists"}, 409
+
+        user = User(email, password)
+        db.session.add(user)
+        db.session.commit()
+
+        return {"res": "User created successfully"}, 201
+
+
 """ Authenticate a user and return an access token. """
 @ns.route("/login")
 class Login(Resource):
