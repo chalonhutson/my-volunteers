@@ -1,0 +1,28 @@
+nav {
+    background-color: var(--primary-color);
+}
+
+.navTitle {
+    font-size: 2rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.navTitle:hover {
+    color: black;
+}
+
+.navHeader, .navTitle {
+    color: white;
+}
+
+.navContainer {
+    /* width: 60%; */
+    max-width: 768px;
+}
+
+.navLinkContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
