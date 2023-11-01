@@ -8,6 +8,7 @@ import UpdateVolunteer from "./components/pages/UpdateVolunteer"
 import UpdateEvent from "./components/pages/UpdateEvent"
 import Login from "./components/pages/Login"
 import { RequireAuth } from "react-auth-kit"
+import Navbar from "./components/Navbar"
 
 export const router = createBrowserRouter([
     {
@@ -76,6 +77,7 @@ export const router = createBrowserRouter([
 
 function NavLayout() {
     return <>
+        <Navbar />
         <Outlet />
     </>
 }
