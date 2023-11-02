@@ -46,6 +46,8 @@ class Volunteer(db.Model):
     emails = db.relationship("Email", back_populates="volunteer", lazy=True)
     notes = db.relationship("VolunteerNote", back_populates="volunteer", lazy=True)
 
+    event_invites = db.relationship("VolunteerEventInvite", back_populates="volunteer", lazy=True)
+
     def __init__(self, first_name, last_name, user_id , preferred_contact, image_url=None):
         self.first_name = first_name
         self.last_name = last_name
@@ -82,7 +84,8 @@ class Volunteer(db.Model):
             "preferred_contact": {
                 "method": self.preferred_contact,
                 "contact": preferred_contact
-            }
+            },
+            "events": [invite.event.get_dict() for invite in self.event_invites]
         }
 
 class Event(db.Model):
@@ -97,6 +100,8 @@ class Event(db.Model):
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     user = db.relationship("User", back_populates="events", lazy=True)
+
+    volunteer_invites = db.relationship("VolunteerEventInvite", back_populates="event", lazy=True)
 
     def __init__(self, event_name, event_date, event_description, event_location, user_id):
         self.event_name = event_name
@@ -185,6 +190,32 @@ class VolunteerNote(db.Model):
         return {
             "note_id": self.note_id,
             "content": self.content
+        }
+
+
+class VolunteerEventInvite(db.Model):
+    __tablename__ = "volunteer_event_invites"
+
+    invite_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    volunteer_id = db.Column(db.Integer, db.ForeignKey("volunteers.volunteer_id"), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey("events.event_id"), nullable=False)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    volunteer = db.relationship("Volunteer", back_populates="event_invites", lazy=True)
+    event = db.relationship("Event", back_populates="volunteer_invites", lazy=True)
+
+    def __init__(self, volunteer_id, event_id):
+        self.volunteer_id = volunteer_id
+        self.event_id = event_id
+
+    def __repr__(self):
+        return f"<VolunteerEventInvite {self.invite_id}>"
+
+    def get_dict(self):
+        return {
+            "invite_id": self.invite_id,
+            "volunteer": self.volunteer.get_dict(),
+            "event": self.event.get_dict()
         }
 
 

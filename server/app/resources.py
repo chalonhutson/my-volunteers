@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_tok
 
 from .extensions import db
 from .api_models import login_model, volunteer_note_model
-from .models import User, Volunteer, Event, Phone, Email, VolunteerNote
+from .models import User, Volunteer, Event, Phone, Email, VolunteerNote, VolunteerEventInvite
 
 authorizations = {
     "jsonWebToken": {
@@ -327,3 +327,108 @@ class VolunteerEmailById(Resource):
         db.session.commit()
 
         return {"res": "Email deleted successfully"}
+
+
+@ns.route("/volunteers/<int:volunteer_id>/events")
+class VolunteerInvitation(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def get(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to view this volunteer"}, 401
+
+        return [event.get_dict() for event in volunteer.events]
+
+    @ns.doc(security="jsonWebToken")
+    def post(self, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to add events to this volunteer"}, 401
+
+        event = Event.query.get(ns.payload["event_id"])
+        volunteer.events.append(event)
+        db.session.commit()
+
+        return {"res": "Event added successfully"}
+
+@ns.route("/volunteers/<int:volunteer_id>/events/<int:event_id>")
+class VolunteerInvitationById(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def delete(self, volunteer_id, event_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        volunteer = Volunteer.query.get(volunteer_id)
+        if volunteer.user_id != user.user_id:
+            return {"res": "You are not authorized to delete events from this volunteer"}, 401
+
+        event = Event.query.get(event_id)
+        volunteer.events.remove(event)
+        db.session.commit()
+
+        return {"res": "Event deleted successfully"}
+
+@ns.route("/events/<int:event_id>/volunteers")
+class EventInvitation(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def get(self, event_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event.query.get(event_id)
+        if event.user_id != user.user_id:
+            return {"res": "You are not authorized to view this event"}, 401
+
+        return [volunteer_invite.get_dict() for volunteer_invite in event.volunteer_invites]
+
+    @ns.doc(security="jsonWebToken")
+    def put(self, event_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event.query.get(event_id)
+        if event.user_id != user.user_id:
+            return {"res": "You are not authorized to add volunteers to this event"}, 401
+
+        invited = filter(lambda x: x["invited"] == True , ns.payload)
+        uninvited = filter(lambda x: x["invited"] == False , ns.payload)
+
+        # print(list(invited))
+
+        # print(event)
+
+        for volunteer in invited:
+            volunteer_invite = VolunteerEventInvite.query.filter_by(event_id=event_id, volunteer_id=volunteer["volunteer_id"]).first()
+
+            if volunteer_invite is None:
+                volunteer_invite = VolunteerEventInvite(volunteer["volunteer_id"], event_id)
+                db.session.add(volunteer_invite)
+            
+
+        for volunteer in uninvited:
+            volunteer_invite = VolunteerEventInvite.query.filter_by(event_id=event_id, volunteer_id=volunteer["volunteer_id"]).first()
+            if volunteer_invite is not None:
+                db.session.delete(volunteer_invite)
+
+        db.session.commit()
+
+        return {"res": "Volunteer added successfully"}
+
+@ns.route("/events/<int:event_id>/volunteers/<int:volunteer_id>")
+class EventInvitationById(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def delete(self, event_id, volunteer_id):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        event = Event.query.get(event_id)
+        if event.user_id != user.user_id:
+            return {"res": "You are not authorized to delete volunteers from this event"}, 401
+
+        volunteer = Volunteer.query.get(volunteer_id)
+        event.volunteers.remove(volunteer)
+        db.session.commit()
+
+        return {"res": "Volunteer deleted successfully"}

@@ -22,6 +22,72 @@ export default function UpdateEvent() {
         event_description: ""
     })
 
+    const [volunteers, setVolunteers] = useState([])
+
+    const [invitesUpdated, setInvitesUpdated] = useState(false)
+
+    // Get all volunteers for user, then update if they are already invited to event
+    useEffect(() => {
+
+        let volunteerLocal = []
+        let volunteerInvites = []
+
+        Promise.all([
+
+            fetch(`/api/volunteers`, {
+                method: "GET",
+                headers: {
+                    "Authorization": authHeader(),
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        console.log("Something went wrong while fetching volunteers.")
+                        throw new Error("Network response was not ok")
+                    }
+                    return res.json()
+                })
+                .then((data) => {
+                    volunteerLocal = data
+                }),
+
+
+            fetch(`/api/events/${eventId}/volunteers`, {
+                method: "GET",
+                headers: {
+                    "Authorization": authHeader(),
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        console.log("Something went wrong while fetching volunteers.")
+                        throw new Error("Network response was not ok")
+                    }
+                    return res.json()
+                })
+                .then((data) => {
+                    console.log(data)
+                    volunteerInvites = data.map(volInvite => volInvite.volunteer.volunteer_id)
+                })
+
+        ]).then(() => {
+
+            for (let i = 0; i < volunteerLocal.length; i++) {
+                if (volunteerInvites.includes(volunteerLocal[i].volunteer_id)) {
+                    volunteerLocal[i].invited = true
+                } else {
+                    volunteerLocal[i].invited = false
+                }
+                volunteerLocal[i].isUpdated = false
+            }
+
+            setVolunteers(volunteerLocal)
+
+        })
+    }, [])
+
 
 
     useEffect(() => {
@@ -42,9 +108,49 @@ export default function UpdateEvent() {
                     event_date: data.event_date,
                     event_description: data.event_description
                 })
-                console.log(data.event_date)
             })
     }, [])
+
+    function handleUpdateInvites(volunteer_id) {
+
+        console.log(volunteer_id)
+        setVolunteers(volunteers.map((vol) => {
+            if (volunteer_id === vol.volunteer_id) {
+                vol.invited = !vol.invited
+                vol.isUpdated = true
+            }
+            return vol
+        }
+        ))
+        setInvitesUpdated(true)
+
+    }
+
+    function handleUpdateInvitesExecute() {
+
+        const invites = volunteers.filter((vol) => vol.isUpdated === true)
+
+        fetch(`/api/events/${eventId}/volunteers`, {
+            method: "PUT",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(invites)
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("Something went wrong while updating invites.")
+                    throw new Error("Network response was not ok")
+                }
+            })
+            .then((data) => {
+                toast.success("Invites updated successfully.")
+                setInvitesUpdated(false)
+            })
+
+    }
+
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -125,6 +231,40 @@ export default function UpdateEvent() {
                     </div>
                     <button className="mt-3 heroBtn" type="submit">Update</button>
                 </form>
+                <div className="volunteerInvites mt-3">
+                    <div className="volunteerInvitesHeader">
+                        <h3>Volunteer Invites</h3>
+                        {
+                            invitesUpdated ?
+
+                                <button
+                                    onClick={() => handleUpdateInvitesExecute()}
+                                >Update Invites</button>
+
+                                : null
+                        }
+                    </div>
+                    <div className="volunteerContainer">
+                        {volunteers.map((volunteer) => {
+                            return (
+                                <span
+                                    onClick={() => handleUpdateInvites(volunteer.volunteer_id)}
+                                    className="volunteerCheckContainer"
+                                    key={volunteer.volunteer_id}>
+                                    <input
+                                        // onChange={() => handleUpdateInvites(volunteer.volunteer_id)}
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={volunteer.invited}
+                                    />
+                                    <label>{volunteer.first_name} {volunteer.last_name}</label>
+                                </span>
+                            )
+                        }
+                        )}
+                    </div>
+
+                </div>
                 <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
             </div>
         </main>

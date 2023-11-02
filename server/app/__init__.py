@@ -15,13 +15,13 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.environ["JWT_SECRET_KEY"]
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 
-    @app.route("/")
-    def index():
-        return send_from_directory("static", "index.html")
+    # @app.route("/")
+    # def index():
+    #     return send_from_directory("static", "index.html")
 
-    @app.route("/<path:path>")
-    def static_proxy(path):
-        return send_from_directory("static", path)
+    # @app.route("/<path:path>")
+    # def static_proxy(path):
+    #     return send_from_directory("static", path)
 
 
 
