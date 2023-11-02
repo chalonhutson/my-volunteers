@@ -20,7 +20,8 @@ export default function UpdateVolunteer() {
         },
         phones: [],
         emails: [],
-        notes: []
+        notes: [],
+        events: []
     })
 
     const { volunteerId } = useParams()
@@ -1104,6 +1105,24 @@ export default function UpdateVolunteer() {
                     </div>
                 </div>
                 <button onClick={() => handleVolunteerUpdate()} className="mt-3 heroBtn">Update</button>
+
+                <div className="volunteerEventsContainer">
+                    <h3 className="mt-3">Events</h3>
+                    <div className="eventContainer">
+                        {volunteer.events.map((event) => {
+                            return (
+                                <span onClick={() => navigate(`/events/${event.event_id}`)} className="volunteerEvent" key={event.event_id}>
+                                    <p>{event.event_name}</p>
+                                    <p>{event.event_date}</p>
+                                    <p>{event.event_location}</p>
+                                </span>
+                            )
+                        }
+                        )}
+
+                    </div>
+                </div>
+
                 <button onClick={() => handleVolunteerDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
             </div >
         </main >
