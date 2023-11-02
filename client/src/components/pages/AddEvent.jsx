@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import HeroBtn from '../buttons/HeroBtn'
 
 import '../../css/AddUpdateVolunteerEvent.css'
+import { toast } from 'react-toastify'
 
 export default function AddEvent() {
 
@@ -34,9 +35,14 @@ export default function AddEvent() {
             },
             body: JSON.stringify(newEvent)
         })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    toast.error("Something went wrong while adding event.")
+                    throw new Error("Network response was not ok")
+                }
+            })
             .then(data => {
-                console.log(data)
+                toast.success("Event added successfully.")
                 navigate('/events')
             }
             )

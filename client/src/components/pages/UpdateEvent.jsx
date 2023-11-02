@@ -2,6 +2,8 @@ import { useParams, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useAuthHeader } from "react-auth-kit"
 
+import { toast } from "react-toastify"
+
 import HeroBtn from '../buttons/HeroBtn'
 
 import "../../css/AddUpdateVolunteerEvent.css"
@@ -54,11 +56,14 @@ export default function UpdateEvent() {
             },
             body: JSON.stringify(event)
         })
-            .then((res) =>
-                res.json()
-            )
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("Something went wrong while updating event.")
+                    throw new Error("Network response was not ok")
+                }
+            })
             .then((data) => {
-                console.log(data)
+                toast.success("Event updated successfully.")
                 navigate("/events")
             })
     }
@@ -71,11 +76,15 @@ export default function UpdateEvent() {
                 'Content-Type': 'application/json',
             }
         })
-            .then((res) =>
-                res.json()
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("Something went wrong while deleting event.")
+                    throw new Error("Network response was not ok")
+                }
+            }
             )
             .then((data) => {
-                console.log(data)
+                toast.success("Event deleted.")
                 navigate("/events")
             })
     }
@@ -114,7 +123,7 @@ export default function UpdateEvent() {
                             onChange={(e) => setEvent({ ...event, event_description: e.target.value })}
                         ></textarea>
                     </div>
-                    <button className="mt-3 heroBtn" type="submit">Submit</button>
+                    <button className="mt-3 heroBtn" type="submit">Update</button>
                 </form>
                 <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
             </div>
