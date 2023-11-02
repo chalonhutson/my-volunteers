@@ -1,6 +1,7 @@
 import { useState, useRef } from "react"
 import { useAuthHeader } from "react-auth-kit"
 import { Link, useNavigate } from "react-router-dom"
+import { toast } from 'react-toastify'
 
 export default function AddVolunteer() {
 
@@ -57,9 +58,14 @@ export default function AddVolunteer() {
             },
             body: JSON.stringify(newVolunteer)
         })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    toast.error("Something went wrong while adding volunteer.")
+                    throw new Error("Network response was not ok")
+                }
+            })
             .then(data => {
-                console.log(data)
+                toast.success("Volunteer added successfully.")
                 navigate("/volunteers")
             }
             )

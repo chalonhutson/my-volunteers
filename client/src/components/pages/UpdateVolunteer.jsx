@@ -77,30 +77,29 @@ export default function UpdateVolunteer() {
             })
     }
 
-    // function handleSubmit(e) {
-    //     e.preventDefault()
-    //     fetch(`/api/volunteers/${volunteerId}`, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Authorization": authHeader(),
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(volunteer)
-    //     })
-    //         .then((res) => {
-    //             if (!res.ok) {
-    //                 toast.error("There was an error updating the volunteer.")
-    //                 throw new Error("Network response was not ok")
-    //             }
-    //             return res.json()
-    //         })
-    //         .then((data) => {
-    //             console.log(data)
-    //             navigate("/volunteers")
-    //         })
-    // }
+    function handleVolunteerUpdate() {
+        fetch(`/api/volunteers/${volunteerId}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": authHeader(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(volunteer)
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    toast.error("There was an error updating the volunteer.")
+                    throw new Error("Network response was not ok")
+                }
+                return res.json()
+            })
+            .then((data) => {
+                toast.success("Volunteer updated successfully.")
+                navigate("/volunteers")
+            })
+    }
 
-    function handleDelete() {
+    function handleVolunteerDelete() {
         fetch(`/api/volunteers/${volunteerId}`, {
             method: "DELETE",
             headers: {
@@ -115,8 +114,8 @@ export default function UpdateVolunteer() {
                 return res.json()
             })
             .then((data) => {
-                // console.log(data)
-                getUpdatedVolunteer()
+                toast.success("Volunteer deleted.")
+                navigate("/volunteers")
             })
     }
 
@@ -1053,7 +1052,6 @@ export default function UpdateVolunteer() {
             </Link>
             <div className="cardLarge volunteerInfo">
                 <h1 className="mt-2">Edit Volunteer</h1>
-                {/* <form onSubmit={handleSubmit}> */}
                 <div className="upperForm">
                     <div className="inputContainer">
                         <label className="form-label" htmlFor="name">First Name</label>
@@ -1105,9 +1103,8 @@ export default function UpdateVolunteer() {
                         {getNotes()}
                     </div>
                 </div>
-                <button className="mt-3 heroBtn">Update</button>
-                {/* </form> */}
-                <button onClick={() => handleDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
+                <button onClick={() => handleVolunteerUpdate()} className="mt-3 heroBtn">Update</button>
+                <button onClick={() => handleVolunteerDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
             </div >
         </main >
     )
