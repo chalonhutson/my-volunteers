@@ -89,3 +89,55 @@ button {
     background-color: var(--primary-color);
     color: var(--accent-color);
 }
+
+/* .headShot:hover {
+    filter: brightness(.5);
+} */
+
+.headShotContainer {
+position: relative;
+display: inline-block; /* Ensure that the container only takes the space of the image */
+}
+  
+.overlay {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5);
+display: none;
+border-radius: 50%;
+}
+
+.headShotContainer:hover .overlay {
+display: block;
+}
+
+.editSymbol {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+color: white;
+font-size: 24px;
+filter:invert(100%);
+}
+
+.imageUploadContainer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: .5rem 0;
+    width: 500px;
+    height: 250px;
+    background-color: var(--primary-color);
+    border-radius: .5rem;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+  

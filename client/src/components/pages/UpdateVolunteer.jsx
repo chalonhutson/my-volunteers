@@ -6,25 +6,62 @@ import { toast } from 'react-toastify'
 
 import "../../css/AddUpdateVolunteerEvent.css"
 
+import noImage from "../../assets/default/no-volunteer-img.png"
+import addPhoto from "../../assets/default/add-photo.svg"
+import ImgUpload from "../ImgUpload"
+
 export default function UpdateVolunteer() {
 
     const authHeader = useAuthHeader()
     const navigate = useNavigate()
 
-    const [volunteer, setVolunteer] = useState({
-        first_name: "",
-        last_name: "",
-        preferred_contact: {
-            method: "none",
-            contact: "none"
-        },
-        phones: [],
-        emails: [],
-        notes: [],
-        events: []
-    })
+    const [imageModalShowing, setImageModalShowing] = useState(false)
+
+    // const [volunteer, setVolunteer] = useState({
+    //     first_name: "",
+    //     last_name: "",
+    //     preferred_contact: {
+    //         method: "none",
+    //         contact: "none"
+    //     },
+    //     phones: [],
+    //     emails: [],
+    //     notes: [],
+    //     events: []
+    // })
+
+    const [volunteer, setVolunteer] = useState(null)
 
     const { volunteerId } = useParams()
+
+
+    // useEffect(() => {
+    //     let newImageURL = ""
+
+    //     fetch(`/api/volunteer/${volunteerId}/images`, {
+    //         method: "GET",
+    //         headers: {
+    //             "Authorization": authHeader(),
+    //             'Content-Type': 'application/json',
+    //         }
+    //     })
+    //         .then((res) =>
+    //             res.json()
+    //         )
+    //         .then((data) => {
+    //             if (data.length > 0) {
+    //                 newImageURL = data
+    //             } else {
+    //                 newImageURL = ""
+    //             }
+    //             setVolunteer(
+    //                 {
+    //                     ...volunteer,
+    //                     new_image_url: newImageURL
+    //                 }
+    //             )
+    //         })
+    // }, [])
 
 
     useEffect(() => {
@@ -1051,80 +1088,107 @@ export default function UpdateVolunteer() {
             <Link to="/volunteers">
                 <button className="heroBtn">back to volunteers</button>
             </Link>
-            <div className="cardLarge volunteerInfo">
-                <h1 className="mt-2">Edit Volunteer</h1>
-                <div className="upperForm">
-                    <div className="inputContainer">
-                        <label className="form-label" htmlFor="name">First Name</label>
-                        <input className="form-control" type="text" name="name" id="name"
-                            value={volunteer.first_name}
-                            onChange={(e) => setVolunteer({ ...volunteer, first_name: e.target.value })}
+
+            {!volunteer ? <h1>Loading...</h1> : <>
+
+                <ImgUpload
+                    setShow={setImageModalShowing}
+                    show={imageModalShowing}
+                    fetch_url={`/api/volunteer/${volunteer.volunteer_id}/images`}
+                    nav_url={`/volunteers/${volunteer.volunteer_id}`}
+                />
+
+                <div className="cardLarge volunteerInfo">
+                    <h1 className="mt-2">Edit Volunteer</h1>
+                    <div className="headShotContainer">
+                        <img
+                            className="headShot"
+                            src={
+                                volunteer.image_url ?
+                                    volunteer.image_url :
+                                    noImage
+
+                            }
+                            alt="no image found"
+                            style={{ width: "10rem", height: "10rem", objectFit: "cover", borderRadius: "50%" }}
                         />
+                        <div className="overlay" onClick={() => setImageModalShowing(true)}>
+                            <img src={addPhoto} className="editSymbol" />
+                        </div>
                     </div>
-                    <div className="inputContainer">
-                        <label className="form-label" htmlFor="last-name">Last Name</label>
-                        <input className="form-control" type="text" name="last-name" id="last-name"
-                            value={volunteer.last_name}
-                            onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
-                        />
+                    <div className="upperForm">
+                        <div className="inputContainer">
+                            <label className="form-label" htmlFor="name">First Name</label>
+                            <input className="form-control" type="text" name="name" id="name"
+                                value={volunteer.first_name}
+                                onChange={(e) => setVolunteer({ ...volunteer, first_name: e.target.value })}
+                            />
+                        </div>
+                        <div className="inputContainer">
+                            <label className="form-label" htmlFor="last-name">Last Name</label>
+                            <input className="form-control" type="text" name="last-name" id="last-name"
+                                value={volunteer.last_name}
+                                onChange={(e) => setVolunteer({ ...volunteer, last_name: e.target.value })}
+                            />
+                        </div>
+                        <div className="inputContainer">
+                            <label className="form-label" htmlFor="preferred-contact-method">Preferred Contact</label>
+                            <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
+                                <option value="email">Email</option>
+                                <option value="phone">Phone</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="inputContainer">
-                        <label className="form-label" htmlFor="preferred-contact-method">Preferred Contact</label>
-                        <select className="form-select" name="preferred-contact-metho" id="preferred-contact-method">
-                            <option value="email">Email</option>
-                            <option value="phone">Phone</option>
-                            <option value="none">None</option>
-                        </select>
+                    <div className="phonesContainer">
+                        <span className="addPhoneInput">
+                            <label htmlFor="add-phone">Phone</label>
+                            <button onClick={() => addPhoneInput()} className="ms-2 addButton" type="button" id="add-phone">+</button>
+                        </span>
+                        <div className="phoneInputContainer">
+                            {getPhones()}
+                        </div>
                     </div>
-                </div>
-                <div className="phonesContainer">
-                    <span className="addPhoneInput">
-                        <label htmlFor="add-phone">Phone</label>
-                        <button onClick={() => addPhoneInput()} className="ms-2 addButton" type="button" id="add-phone">+</button>
-                    </span>
-                    <div className="phoneInputContainer">
-                        {getPhones()}
+                    <div className="emailsContainer">
+                        <span className="addEmailInput">
+                            <label htmlFor="add-email">Email</label>
+                            <button onClick={() => addEmailInput()} className="ms-2 addButton" type="button" id="add-email">+</button>
+                        </span>
+                        <div className="emailInputContainer">
+                            {getEmails()}
+                        </div>
                     </div>
-                </div>
-                <div className="emailsContainer">
-                    <span className="addEmailInput">
-                        <label htmlFor="add-email">Email</label>
-                        <button onClick={() => addEmailInput()} className="ms-2 addButton" type="button" id="add-email">+</button>
-                    </span>
-                    <div className="emailInputContainer">
-                        {getEmails()}
+                    <div className="notesContainer">
+                        <span className="addNoteInput">
+                            <label htmlFor="add-note">Note</label>
+                            <button onClick={() => addNoteInput()} className="ms-2 addButton" type="button" id="add-note">+</button>
+                        </span>
+                        <div className="noteInputContainer">
+                            {getNotes()}
+                        </div>
                     </div>
-                </div>
-                <div className="notesContainer">
-                    <span className="addNoteInput">
-                        <label htmlFor="add-note">Note</label>
-                        <button onClick={() => addNoteInput()} className="ms-2 addButton" type="button" id="add-note">+</button>
-                    </span>
-                    <div className="noteInputContainer">
-                        {getNotes()}
-                    </div>
-                </div>
-                <button onClick={() => handleVolunteerUpdate()} className="mt-3 heroBtn">Update</button>
+                    <button onClick={() => handleVolunteerUpdate()} className="mt-3 heroBtn">Update</button>
 
-                <div className="volunteerEventsContainer">
-                    <h3 className="mt-3">Events</h3>
-                    <div className="eventContainer">
-                        {volunteer.events.map((event) => {
-                            return (
-                                <span onClick={() => navigate(`/events/${event.event_id}`)} className="volunteerEvent" key={event.event_id}>
-                                    <p>{event.event_name}</p>
-                                    <p>{event.event_date}</p>
-                                    <p>{event.event_location}</p>
-                                </span>
-                            )
-                        }
-                        )}
+                    <div className="volunteerEventsContainer">
+                        <h3 className="mt-3">Events</h3>
+                        <div className="eventContainer">
+                            {volunteer.events.map((event) => {
+                                return (
+                                    <span onClick={() => navigate(`/events/${event.event_id}`)} className="volunteerEvent" key={event.event_id}>
+                                        <p>{event.event_name}</p>
+                                        <p>{event.event_date}</p>
+                                        <p>{event.event_location}</p>
+                                    </span>
+                                )
+                            }
+                            )}
 
+                        </div>
                     </div>
-                </div>
 
-                <button onClick={() => handleVolunteerDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
-            </div >
+                    <button onClick={() => handleVolunteerDelete()} className="mt-3 w-100 btn btn-danger">Delete</button>
+                </div >
+            </>}
         </main >
     )
 }

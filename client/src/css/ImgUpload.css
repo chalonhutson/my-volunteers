@@ -1,0 +1,19 @@
+.selectImageButton {
+    color: white;
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+    background-color: var(--primary-color);
+}
+
+.selectImageButton:hover {
+    cursor: pointer;
+    filter: brightness(.9)
+}
+
+
+.uploadContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
