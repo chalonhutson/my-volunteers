@@ -6,7 +6,7 @@ import "../../css/Volunteers.css"
 
 import HeroBtn from '../buttons/HeroBtn';
 
-import image from "../../assets/headshots/headshot_1.jpg"
+import noImage from "../../assets/default/no-volunteer-img.png"
 
 
 
@@ -53,7 +53,11 @@ export default function Volunteers() {
                             <span>
                                 <img
                                     className="volunteerImage"
-                                    src={image}
+                                    src={
+                                        volunteer.image_url
+                                            ? volunteer.image_url
+                                            : noImage
+                                    }
                                     alt={volunteer.first_name}
                                 ></img>
                             </span>

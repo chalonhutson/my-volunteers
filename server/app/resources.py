@@ -1,3 +1,4 @@
+import os
 import random
 
 from flask_restx import Resource, Namespace
@@ -6,6 +7,21 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_tok
 from .extensions import db
 from .api_models import login_model, volunteer_note_model
 from .models import User, Volunteer, Event, Phone, Email, VolunteerNote, VolunteerEventInvite
+
+from werkzeug.utils import secure_filename
+from flask import request
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+from uuid import uuid4
+
+cloudinary.config(
+    cloud_name=os.environ["CLOUDINARY_NAME"],
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"]
+)
 
 authorizations = {
     "jsonWebToken": {
@@ -432,3 +448,61 @@ class EventInvitationById(Resource):
         db.session.commit()
 
         return {"res": "Volunteer deleted successfully"}
+
+
+
+@ns.route("/volunteer/<int:volunteer_id>/images")
+class VolunteerImages(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def post(self, volunteer_id):
+
+        volunteer = Volunteer.query.get(volunteer_id)
+
+        if volunteer is None:
+            return {'message': 'Volunteer not found'}, 404
+
+        if 'file' not in request.files:
+            return {'message': 'No file part'}, 400
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return {'message': 'No selected file'}, 400
+
+        if file:
+            filename = str(uuid4())
+            
+            res = cloudinary.uploader.upload(
+                file, 
+                public_id=filename, 
+                folder="my-volunteers/volunteer-images", 
+                unique_filename=True, 
+                width=300, height=300, crop="fill",
+            )
+
+
+            # upload_img = cloudinary.CloudinaryImage(file)
+
+            # print(str(upload_img.public_id))
+            volunteer.image_url = res["secure_url"]
+            db.session.commit()
+
+            return {'message': 'File successfully uploaded'}, 200
+
+    # Grabs the volunteers image from cloudinary    
+    @ns.doc(security="jsonWebToken")
+    def get(self, volunteer_id):
+        volunteer = Volunteer.query.get(volunteer_id)
+
+        if volunteer is None:
+            return {'message': 'Volunteer not found'}, 404
+
+        try:
+            result = cloudinary.api.resource_by_asset_id(volunteer.image_url)["secure_url"]
+            return result, 200
+        except:
+            return {'message': 'Image not found'}, 404
+
+
