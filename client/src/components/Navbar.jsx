@@ -55,7 +55,14 @@ export default function Navbar() {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link navHeader disabled">Settings</Link>
+                                <Link
+                                    className={
+                                        location === "/settings" ? "nav-link navHeader active" : "nav-link navHeader"
+                                    }
+                                    to="/settings"
+                                >
+                                    Settings
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <Link
