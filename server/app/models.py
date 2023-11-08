@@ -234,22 +234,40 @@ def populate_database():
     db.session.add_all([user1, user2])
     db.session.commit()
 
+    # volunteers_user1 = [
+    #     Volunteer("Katniss", "Everdeen", user1.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Peeta", "Mellark", user1.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Effie", "Trinket", user1.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Cinna", "Cinna", user1.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Haymitch", "Abernathy", user1.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Gale", "Hawthorne", user1.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
+    # ]
+
+    # volunteers_user2 = [
+    #     Volunteer("Hank", "Hill", user2.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Bobby", "Hill", user2.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Dale", "Gribble", user2.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Bill", "Dauterive", user2.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
+    #     Volunteer("Peggy", "Hill", user2.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+    # ]
+
     volunteers_user1 = [
-        Volunteer("Katniss", "Everdeen", user1.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Peeta", "Mellark", user1.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Effie", "Trinket", user1.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Cinna", "Cinna", user1.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Haymitch", "Abernathy", user1.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Gale", "Hawthorne", user1.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Katniss", "Everdeen", user1.user_id, "none", None),
+        Volunteer("Peeta", "Mellark", user1.user_id, "phone", None),
+        Volunteer("Effie", "Trinket", user1.user_id, "email", None),
+        Volunteer("Cinna", "Cinna", user1.user_id, "none", None),
+        Volunteer("Haymitch", "Abernathy", user1.user_id, "phone", None),
+        Volunteer("Gale", "Hawthorne", user1.user_id, "email", None),
     ]
 
     volunteers_user2 = [
-        Volunteer("Hank", "Hill", user2.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Bobby", "Hill", user2.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Dale", "Gribble", user2.user_id, "email", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Bill", "Dauterive", user2.user_id, "none", f"headshot_{random.randint(1, 24)}.jpg"),
-        Volunteer("Peggy", "Hill", user2.user_id, "phone", f"headshot_{random.randint(1, 24)}.jpg"),
+        Volunteer("Hank", "Hill", user2.user_id, "none", None),
+        Volunteer("Bobby", "Hill", user2.user_id, "phone", None),
+        Volunteer("Dale", "Gribble", user2.user_id, "email", None),
+        Volunteer("Bill", "Dauterive", user2.user_id, "none", None),
+        Volunteer("Peggy", "Hill", user2.user_id, "phone", None),
     ]
+
 
     db.session.add_all(volunteers_user1 + volunteers_user2)
     db.session.commit()

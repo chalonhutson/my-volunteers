@@ -9,6 +9,7 @@ from .api_models import login_model, volunteer_note_model
 from .models import User, Volunteer, Event, Phone, Email, VolunteerNote, VolunteerEventInvite
 
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request
 
 import cloudinary
@@ -506,3 +507,35 @@ class VolunteerImages(Resource):
             return {'message': 'Image not found'}, 404
 
 
+@ns.route("/users/change-password")
+class ChangePassword(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def put(self):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+
+        current_password = ns.payload["current_password"]
+        new_password = ns.payload["new_password"]
+
+        if not user.check_password(current_password):
+            return {"res": "Invalid current password"}, 401
+
+        user.password_hash = generate_password_hash(ns.payload["new_password"])
+        db.session.commit()
+
+        print("Password changed.")
+
+        return {"res": "Password changed successfully"}, 200
+
+@ns.route("/users/change-email")
+class ChangeEmail(Resource):
+    method_decorators = [jwt_required()]
+
+    @ns.doc(security="jsonWebToken")
+    def put(self):
+        user = User.query.filter_by(email=get_jwt_identity()).first()
+        user.email = ns.payload["new_email"]
+        db.session.commit()
+
+        return {"res": "Email changed successfully"}

@@ -1,4 +1,5 @@
 import { Outlet, createBrowserRouter } from "react-router-dom"
+
 import Dashboard from "./components/pages/Dashboard"
 import Volunteers from "./components/pages/Volunteers"
 import Events from "./components/pages/Events"
@@ -7,8 +8,10 @@ import AddVolunteer from "./components/pages/AddVolunteer"
 import UpdateVolunteer from "./components/pages/UpdateVolunteer"
 import UpdateEvent from "./components/pages/UpdateEvent"
 import Login from "./components/pages/Login"
-import { RequireAuth } from "react-auth-kit"
 import Navbar from "./components/Navbar"
+import Settings from "./components/pages/Settings"
+
+import { RequireAuth } from "react-auth-kit"
 
 export const router = createBrowserRouter([
     {
@@ -68,6 +71,14 @@ export const router = createBrowserRouter([
                 element: (
                     <RequireAuth loginPath="/login">
                         <UpdateEvent />
+                    </RequireAuth>
+                )
+            },
+            {
+                path: "/settings",
+                element: (
+                    <RequireAuth loginPath="/login">
+                        <Settings />
                     </RequireAuth>
                 )
             }
