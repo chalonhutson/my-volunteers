@@ -79,9 +79,9 @@ export const router = createBrowserRouter([
             {
                 path: "/fundraising",
                 element: (
-                    <RequireAuth loginPath="/login">
-                        <Fundraising />
-                    </RequireAuth>
+                    // <RequireAuth loginPath="/login">
+                    <Fundraising />
+                    // </RequireAuth>
                 )
             },
             {

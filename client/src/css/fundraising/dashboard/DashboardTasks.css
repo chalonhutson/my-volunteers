@@ -1,0 +1,40 @@
+.topSection {
+    padding: 1rem;
+}
+
+.dateSelector {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.dateSelector:hover {
+    cursor: pointer;
+}
+
+.number {
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.selected {
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    color: white;
+}
+
+.weekday {
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+}
+
+
