@@ -21,6 +21,7 @@ export default function DashboardRecentProspects() {
             {prospects.map(prospect => (
                 <DashboardRecentProspectSingle prospect={prospect} />
             ))}
+            <p className="showMore">View All Prospects</p>
         </Card>
     )
 }
