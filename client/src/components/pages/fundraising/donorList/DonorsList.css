@@ -1,0 +1,17 @@
+.donorListContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: var(--accent-color);
+}
+
+.donorListEntryContainer {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr .25fr .5fr 1fr;
+
+    border: red solid 1px;
+
+    text-align: center;
+}
