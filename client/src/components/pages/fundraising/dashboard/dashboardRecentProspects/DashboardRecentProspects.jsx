@@ -1,11 +1,15 @@
 import { useState } from "react"
 import { Card } from "react-bootstrap"
 
+import { useNavigate } from "react-router-dom"
+
 import "../../../../../css/fundraising/dashboard/dashboardRecentProspects.css"
 
 import DashboardRecentProspectSingle from "./DashboardRecentProspectSingle"
 
 export default function DashboardRecentProspects() {
+
+    const navigate = useNavigate()
 
     const [prospects, setProspects] = useState([
         { id: 1, name: "Jeff Wineger", owner: "Steve Smith" },
@@ -21,7 +25,7 @@ export default function DashboardRecentProspects() {
             {prospects.map(prospect => (
                 <DashboardRecentProspectSingle prospect={prospect} />
             ))}
-            <p className="showMore">View All Prospects</p>
+            <p onClick={() => navigate("/fundraising/donors")} className="showMore">View All Donors</p>
         </Card>
     )
 }

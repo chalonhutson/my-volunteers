@@ -1,17 +1,49 @@
+.donorListComponent {
+    padding: 2rem;
+}
+
+.donorTopSectionButton {
+    background-color: var(--primary-color);
+    border: none;
+}
+
 .donorListContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
 
     background-color: var(--accent-color);
+
+    border-radius: 1rem;
+
+    padding: 1rem;
+
+    margin-top: 1rem;
+}
+
+.donorListHeader {
+    font-size: .75rem;
 }
 
 .donorListEntryContainer {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr .25fr .5fr 1fr;
+    grid-template-columns: .35fr 1fr .35fr .5fr 1fr 1fr 1fr;
 
-    border: red solid 1px;
 
     text-align: center;
+
+    padding: .5rem 0;
+
+    border-bottom: 1px solid var(--background-color);
+}
+
+/* .donorListEntryContainer:nth-child(odd) {
+    background-color: var(--background-color);
+} */
+
+.highlightable:hover {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
 }

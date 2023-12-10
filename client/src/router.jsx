@@ -15,6 +15,8 @@ import Fundraising from "./components/pages/fundraising/Fundraising"
 
 import { RequireAuth } from "react-auth-kit"
 import DonorsList from "./components/pages/fundraising/donorList/DonorsList"
+import AddDonor from "./components/pages/fundraising/donorList/addDonor/AddDonor"
+import Donor from "./components/pages/fundraising/donor/Donor"
 
 export const router = createBrowserRouter([
     {
@@ -90,6 +92,22 @@ export const router = createBrowserRouter([
                 element: (
                     // <RequireAuth loginPath="/login">
                     <DonorsList />
+                    // </RequireAuth>
+                )
+            },
+            {
+                path: "/fundraising/donors/:donorId",
+                element: (
+                    // <RequireAuth loginPath="/login">
+                    <Donor />
+                    // </RequireAuth>
+                )
+            },
+            {
+                path: "/fundraising/add-donor",
+                element: (
+                    // <RequireAuth loginPath="/login">
+                    <AddDonor />
                     // </RequireAuth>
                 )
             },
