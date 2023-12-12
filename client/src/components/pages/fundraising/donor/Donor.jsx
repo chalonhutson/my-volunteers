@@ -47,13 +47,19 @@ export default function Donor() {
                 </p>
             </div>
             <div>
-                <h2>phones</h2>
+                <span className="d-flex align-items-center">
+                    <h2>phones</h2>
+                    <p className="addButton">+</p>
+                </span>
                 {phones.map((phone) => {
                     return <DonorPhoneEntry key={phone.id} phone={phone} />
                 })}
             </div>
             <div>
-                <h2>emails</h2>
+                <span className="d-flex align-items-center">
+                    <h2>emails</h2>
+                    <p className="addButton">+</p>
+                </span>
                 {emails.map((email) => {
                     return <DonorEmailEntry key={email.id} email={email} />
                 })
