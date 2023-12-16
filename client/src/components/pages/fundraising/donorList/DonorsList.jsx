@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Button } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import DonorListEntry from "./DonorListEntry"
 
@@ -20,6 +20,11 @@ export default function DonorsList() {
 
     return (
         <div className="donorListComponent">
+            <span className="addDonorNavLinks">
+                <Link to={"/fundraising"}>dashboard</Link>
+                <p> - </p>
+                <p>donors</p>
+            </span>
             <span className="donorTopSection">
                 <Button onClick={() => navigate("/fundraising/add-donor")} className="donorTopSectionButton" variant="primary">Add Donor</Button>
             </span>
