@@ -20,7 +20,10 @@ export default function DashboardRecentDonations() {
         <Card className="recentDonationsContainer">
             <h4>Recent Donations</h4>
             {donations.map(donation => (
-                <DashboardRecentDonationSingle donation={donation} />
+                <DashboardRecentDonationSingle
+                    key={donation.id}
+                    donation={donation}
+                />
             ))}
             <p className="showMore">View All Donations</p>
         </Card>

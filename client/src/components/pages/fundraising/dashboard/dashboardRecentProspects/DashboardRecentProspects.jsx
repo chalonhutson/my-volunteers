@@ -23,7 +23,10 @@ export default function DashboardRecentProspects() {
         <Card className="recentProspectsContainer">
             <h4>Recent Prospects</h4>
             {prospects.map(prospect => (
-                <DashboardRecentProspectSingle prospect={prospect} />
+                <DashboardRecentProspectSingle
+                    key={prospect.id}
+                    prospect={prospect}
+                />
             ))}
             <p onClick={() => navigate("/fundraising/donors")} className="showMore">View All Donors</p>
         </Card>
