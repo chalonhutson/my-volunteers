@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react"
 import { Card } from "react-bootstrap"
 
+import { useNavigate } from "react-router-dom"
+
 import "../../../../../css/fundraising/dashboard/dashboardRecentDonations.css"
 
 import DashboardRecentDonationSingle from "./DashboardRecentDonationSingle"
 
 export default function DashboardRecentDonations() {
+
+    const navigate = useNavigate()
 
     const [donations, setDonations] = useState([
         { date: "December 21, 2023", id: 1, name: "John Doe", amount: 100 },
@@ -25,7 +29,7 @@ export default function DashboardRecentDonations() {
                     donation={donation}
                 />
             ))}
-            <p className="showMore">View All Donations</p>
+            <p onClick={() => navigate("/fundraising/donations")} className="showMore">View All Donations</p>
         </Card>
     )
 }
