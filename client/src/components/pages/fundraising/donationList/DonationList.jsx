@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom"
 
 import DonationListEntry from "./DonationListEntry"
 
+import NavLinks from "../../../NavLinks"
+
 import "./DonationList.css"
 
 export default function DonationList() {
@@ -11,29 +13,26 @@ export default function DonationList() {
     const navigate = useNavigate()
 
     const [donations, setDonations] = useState([
-        { selected: false, id: 1, name: "John Wick", amount: 1000, date: "December 21, 2023" },
-        { selected: false, id: 2, name: "Jack Bauer", amount: 500, date: "December 21, 2023" }
+        { id: 1, name: "John Doe", date: "2021-01-01", amount: 100.00 },
+        { id: 2, name: "Jane Doe", date: "2021-01-01", amount: 100.00 },
+        { id: 3, name: "John Smith", date: "2021-01-01", amount: 100.00 },
     ])
 
     return (
         <div className="donationListComponent">
-            <span className="addDonationNavLinks">
-                <Link to={"/fundraising"}>dashboard</Link>
-                <p> - </p>
-                <p>donors</p>
-            </span>
+            <NavLinks links={[
+                { name: "dashboard", path: "/fundraising", active: true },
+                { name: "donations", path: "/fundraising/donations", active: false }
+            ]} />
             <span className="donationTopSection">
                 <Button onClick={() => navigate("/fundraising/add-donation")} className="donationTopSectionButton" variant="primary">Add Donation</Button>
             </span>
             <div className="donationListContainer">
                 <span className="donationListEntryContainer">
-                    <p className="donationListHeader"><strong>selected?</strong></p>
+                    <p className="donationListHeader">selected?</p>
                     <p className="donationListHeader"><strong>name</strong></p>
-                    <p className="donationListHeader"><strong>business?</strong></p>
-                    <p className="donationListHeader"><strong>status</strong></p>
-                    <p className="donationListHeader"><strong>expected donation</strong></p>
-                    <p className="donationListHeader"><strong>email</strong></p>
-                    <p className="donationListHeader"><strong>phone</strong></p>
+                    <p className="donationListHeader"><strong>date</strong></p>
+                    <p className="donationListHeader"><strong>amount</strong></p>
                 </span>
                 {donations.map((donation) => {
                     return <DonationListEntry

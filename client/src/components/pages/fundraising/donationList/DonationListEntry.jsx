@@ -17,11 +17,8 @@ export default function DonationListEntry({ donation, callback }) {
                 })
             }} defaultChecked={donation.selected} className="donationListEntryCheckbox" type="checkbox" />
             <p className="donationListEntryName">{donation.name}</p>
-            <FormCheck defaultChecked={donation.business} className="donationListEntryCheckbox" type="checkbox" />
-            <p className="donationListEntryStatus">{donation.status}</p>
-            <p className="donationListEntryAmount">${donation.expected_amount}</p>
-            <p className="donationListEntryAmount">{donation.email}</p>
-            <p className="donationListEntryAmount">{donation.phone}</p>
+            <p className="donationListEntryAmount">{donation.date}</p>
+            <p className="donationListEntryAmount">${donation.amount}</p>
 
         </span>
     )
