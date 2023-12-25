@@ -1,7 +1,12 @@
 import React from 'react'
 import { FormCheck } from 'react-bootstrap'
 
+import { useNavigate } from 'react-router-dom'
+
 export default function DonationListEntry({ donation, callback }) {
+
+    const navigate = useNavigate()
+
     return (
         <span onClick={() => {
             navigate(`/fundraising/donation/${donation.id}`)
