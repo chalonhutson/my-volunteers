@@ -123,6 +123,14 @@ export const router = createBrowserRouter([
                     // </RequireAuth>
                 )
             },
+            // {
+            //     path: "/fundraising/donation/:donationId",
+            //     element: (
+            //         // <RequireAuth loginPath="/login">
+            //         <Donation />
+            //         // </RequireAuth>
+            //     )
+            // },
             {
                 path: "/settings",
                 element: (

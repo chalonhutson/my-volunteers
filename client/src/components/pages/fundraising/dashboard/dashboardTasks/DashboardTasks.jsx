@@ -7,6 +7,8 @@ import DashboardTaskSingle from "./DashboardTaskSingle"
 
 export default function DashboardTasks() {
 
+    const [numOfDisplayedTasks, setNumOfDisplayedTasks] = useState(3)
+
     const [tasks, setTasks] = useState([
         { owner: "Bill Nye", title: "Follow up with John Wick", due_date: "December 23", type: "Reminder", status: "Completed" },
         { owner: "Fred Flint", title: "Sit down with Elon Musk", due_date: "December 23", type: "In Person", status: "Overdue" },
@@ -46,6 +48,10 @@ export default function DashboardTasks() {
         return <ProgressBar now={now} variant="success" />
     }
 
+    function handleNumOfDisplayedTasksChange(e) {
+        setNumOfDisplayedTasks(numOfDisplayedTasks + 3)
+    }
+
     return (
         <div className="dashboardTasksContainer">
             <Card className="topSection">
@@ -69,13 +75,38 @@ export default function DashboardTasks() {
                     </span>
                     <div className="tasksSingleContainer">
                         {tasks.map((task, index) => {
+                            if (index >= numOfDisplayedTasks) return null
                             return (
                                 <DashboardTaskSingle key={index} task={task} />
                             )
                         })}
                     </div>
                 </div>
-                <h4 className="showMore">Show More</h4>
+                {
+                    numOfDisplayedTasks >= tasks.length ?
+                        (
+                            <h4
+                                className="d-flex justify-content-center"
+                            >
+                                No more tasks to show
+                            </h4>
+                        )
+                        :
+                        (
+                            <h4
+                                className="showMore"
+                                onClick={handleNumOfDisplayedTasksChange}
+                            >
+                                Show More
+                            </h4>
+                        )
+                }
+                {/* <h4
+                    className="showMore"
+                    onClick={handleNumOfDisplayedTasksChange}
+                >
+                    Show More
+                </h4> */}
             </Card>
         </div>
     )
