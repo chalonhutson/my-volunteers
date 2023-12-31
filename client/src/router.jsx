@@ -21,6 +21,7 @@ import AddDonor from "./components/pages/fundraising/donorList/addDonor/AddDonor
 import Donor from "./components/pages/fundraising/donor/Donor"
 
 import DonationList from "./components/pages/fundraising/donationList/DonationList"
+import Donation from "./components/pages/fundraising/donation/Donation"
 
 export const router = createBrowserRouter([
     {
@@ -123,14 +124,14 @@ export const router = createBrowserRouter([
                     // </RequireAuth>
                 )
             },
-            // {
-            //     path: "/fundraising/donation/:donationId",
-            //     element: (
-            //         // <RequireAuth loginPath="/login">
-            //         <Donation />
-            //         // </RequireAuth>
-            //     )
-            // },
+            {
+                path: "/fundraising/donation/:donationId",
+                element: (
+                    // <RequireAuth loginPath="/login">
+                    <Donation />
+                    // </RequireAuth>
+                )
+            },
             {
                 path: "/settings",
                 element: (
