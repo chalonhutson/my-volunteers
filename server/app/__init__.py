@@ -24,12 +24,19 @@ def create_app():
     
     @app.route("/volunteers")
     @app.route("/events")
+    @app.route("/fundraising")
+    @app.route("/fundraising/donations")
+    @app.route("/fundraising/add-donation")
+    @app.route("/fundraising/donors")
+    @app.route("/fundraising/add-donor")
     @app.route("/settings")
     def serve_2():
         return send_from_directory(app.static_folder,'index.html')
 
     @app.route("/volunteers/<id>")
     @app.route("/events/<id>")
+    @app.route("/fundraising/donations/<id>")
+    @app.route("/fundraising/donors/<id>")
     def server_3(id):
         return send_from_directory(app.static_folder,'index.html')
 
