@@ -1,0 +1,18 @@
+.donationGoalContainer {
+    margin-top: 1rem;
+    padding: 1rem;
+}
+
+.goalInfoContainer {
+    display: grid;
+    grid-template-columns: 1fr .7fr;
+
+}
+
+.goalMetrics {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}

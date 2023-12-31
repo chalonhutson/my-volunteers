@@ -37,6 +37,17 @@ export default function Navbar() {
                             <li className="nav-item">
                                 <Link
                                     className={
+                                        location === "/fundraising" ? "nav-link navHeader active" : "nav-link navHeader"
+                                    }
+                                    to="/fundraising"
+                                >
+                                    Fundraising
+                                </Link>
+
+                            </li>
+                            <li className="nav-item">
+                                <Link
+                                    className={
                                         location === "/volunteers" ? "nav-link navHeader active" : "nav-link navHeader"
                                     }
                                     to="/volunteers"

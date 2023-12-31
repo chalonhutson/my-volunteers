@@ -1,0 +1,18 @@
+.dashboardContainer {
+    display: grid;
+    grid-template-columns: .6fr .4fr;
+    column-gap: 2rem;
+    padding: 2rem;
+}
+
+.showMore {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary-color);
+}
+
+.showMore:hover {
+    cursor: pointer;
+    color: var(--dark-accent);
+}

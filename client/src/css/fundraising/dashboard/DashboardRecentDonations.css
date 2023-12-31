@@ -1,0 +1,42 @@
+.recentDonationsContainer {
+    display: grid;
+    grid-template-rows: 1fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr .5fr;
+    row-gap: .5rem;
+    padding: 1rem;
+}
+
+.recentDonationSingleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 .5rem;
+    filter: drop-shadow(0 0 .15rem rgba(0, 0, 0, 0.25));
+    border: none;
+}
+
+.recentDonationSingleContainer:hover {
+    background-color: var(--background-color);
+    cursor: pointer;
+}
+
+.recentDonationSingleContainer h4, p, h2 {
+    margin: 0;
+}
+
+.recentDonationSingleContainer h4 {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.recentDonationSingleContainer p {
+    font-size: .75rem;
+    font-style: italic;
+}
+
+.recentDonationSingleContainer h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: green;
+}

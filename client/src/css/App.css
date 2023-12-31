@@ -140,4 +140,12 @@ filter:invert(100%);
     transform: translate(-50%, -50%);
     z-index: 100;
 }
+
+.navLinks {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: .5rem 0;
+}
   
