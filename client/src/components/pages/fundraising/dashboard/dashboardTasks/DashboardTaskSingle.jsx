@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 import "../../../../../css/fundraising/dashboard/DashboardTaskSingle.css"
 import { Button, Card } from "react-bootstrap"
 
 export default function DashboardTaskSingle({ task }) {
+
+    const navigate = useNavigate()
+
     return (
-        <Card className="cardContainer">
+        <Card
+            className="cardContainer"
+            onClick={() => navigate(`/fundraising/tasks/${task.id}`)}
+        >
             <div className="topTaskSection">
                 <h2>{task.title}</h2>
                 <p>{task.type}</p>

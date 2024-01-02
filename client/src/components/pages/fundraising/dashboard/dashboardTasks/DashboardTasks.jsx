@@ -10,12 +10,12 @@ export default function DashboardTasks() {
     const [numOfDisplayedTasks, setNumOfDisplayedTasks] = useState(3)
 
     const [tasks, setTasks] = useState([
-        { owner: "Bill Nye", title: "Follow up with John Wick", due_date: "December 23", type: "Reminder", status: "Completed" },
-        { owner: "Fred Flint", title: "Sit down with Elon Musk", due_date: "December 23", type: "In Person", status: "Overdue" },
-        { owner: "Bill Nye", title: "Send email to Jeff Bezos", due_date: "December 23", type: "Email", status: "Completed" },
-        { owner: "Bill Nye", title: "Invite Johnson Smith to office", due_date: "December 24", type: "Call", status: "To Do" },
-        { owner: "Steve Smith", title: "Plan donor dinner", due_date: "December 24", type: "In Person", status: "To Do" },
-        { owner: "Bill Nye", title: "Send email to Jeff Bezos", due_date: "December 24", type: "Email", status: "To Do" },
+        { id: 1, owner: "Bill Nye", title: "Follow up with John Wick", due_date: "December 23", type: "Reminder", status: "Completed" },
+        { id: 2, owner: "Fred Flint", title: "Sit down with Elon Musk", due_date: "December 23", type: "In Person", status: "Overdue" },
+        { id: 3, owner: "Bill Nye", title: "Send email to Jeff Bezos", due_date: "December 23", type: "Email", status: "Completed" },
+        { id: 4, owner: "Bill Nye", title: "Invite Johnson Smith to office", due_date: "December 24", type: "Call", status: "To Do" },
+        { id: 5, owner: "Steve Smith", title: "Plan donor dinner", due_date: "December 24", type: "In Person", status: "To Do" },
+        { id: 6, owner: "Bill Nye", title: "Send email to Jeff Bezos", due_date: "December 24", type: "Email", status: "To Do" },
     ])
 
     // Used for dates selector
