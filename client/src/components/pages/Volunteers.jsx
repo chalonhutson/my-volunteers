@@ -19,7 +19,7 @@ export default function Volunteers() {
     const authHeader = useAuthHeader()
 
     useEffect(() => {
-        fetch("/api/volunteers", {
+        fetch("/api/volunteers/volunteers", {
             method: "GET",
             headers: {
                 "Authorization": authHeader(),

@@ -3,3 +3,5 @@
 /app/__pycache__
 .flaskenv
 config.sh
+/app/resources/__pycache__
+/app/models/__pycache__

@@ -34,7 +34,7 @@ export default function UpdateEvent() {
 
         Promise.all([
 
-            fetch(`/api/volunteers`, {
+            fetch(`/api/volunteers/volunteers`, {
                 method: "GET",
                 headers: {
                     "Authorization": authHeader(),
@@ -53,7 +53,7 @@ export default function UpdateEvent() {
                 }),
 
 
-            fetch(`/api/events/${eventId}/volunteers`, {
+            fetch(`/api/volunteers/events/${eventId}/volunteers`, {
                 method: "GET",
                 headers: {
                     "Authorization": authHeader(),
@@ -91,7 +91,7 @@ export default function UpdateEvent() {
 
 
     useEffect(() => {
-        fetch(`/api/events/${eventId}`, {
+        fetch(`/api/volunteers/events/${eventId}`, {
             method: "GET",
             headers: {
                 "Authorization": authHeader(),
@@ -130,7 +130,7 @@ export default function UpdateEvent() {
 
         const invites = volunteers.filter((vol) => vol.isUpdated === true)
 
-        fetch(`/api/events/${eventId}/volunteers`, {
+        fetch(`/api/volunteers/events/${eventId}/volunteers`, {
             method: "PUT",
             headers: {
                 "Authorization": authHeader(),
@@ -154,7 +154,7 @@ export default function UpdateEvent() {
 
     function handleSubmit(e) {
         e.preventDefault()
-        fetch(`/api/events/${eventId}`, {
+        fetch(`/api/volunteers/events/${eventId}`, {
             method: "PUT",
             headers: {
                 "Authorization": authHeader(),
@@ -175,7 +175,7 @@ export default function UpdateEvent() {
     }
 
     function handleDelete() {
-        fetch(`/api/events/${eventId}`, {
+        fetch(`/api/volunteers/events/${eventId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": authHeader(),

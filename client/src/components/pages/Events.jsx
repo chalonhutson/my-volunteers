@@ -16,7 +16,7 @@ export default function Events() {
 
 
     useEffect(() => {
-        fetch("/api/events", {
+        fetch("/api/volunteers/events", {
             method: "GET",
             headers: {
                 "Authorization": authHeader(),
