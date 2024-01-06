@@ -50,7 +50,7 @@ export default function AddVolunteer() {
             preferred_contact: preferredContactRef.current.value,
         }
         console.log(newVolunteer)
-        fetch('/api/volunteers', {
+        fetch('/api/volunteers/volunteers', {
             method: 'POST',
             headers: {
                 "Authorization": authHeader(),
