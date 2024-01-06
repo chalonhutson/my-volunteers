@@ -69,7 +69,7 @@ export default function UpdateVolunteer() {
     }, [])
 
     function getUpdatedVolunteer() {
-        fetch(`/api/volunteers/${volunteerId}`, {
+        fetch(`/api/volunteers/volunteers/${volunteerId}`, {
             method: "GET",
             headers: {
                 "Authorization": authHeader(),
@@ -116,7 +116,7 @@ export default function UpdateVolunteer() {
     }
 
     function handleVolunteerUpdate() {
-        fetch(`/api/volunteers/${volunteerId}`, {
+        fetch(`/api/volunteers/volunteers/${volunteerId}`, {
             method: "PUT",
             headers: {
                 "Authorization": authHeader(),
@@ -138,7 +138,7 @@ export default function UpdateVolunteer() {
     }
 
     function handleVolunteerDelete() {
-        fetch(`/api/volunteers/${volunteerId}`, {
+        fetch(`/api/volunteers/volunteers/${volunteerId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": authHeader(),
@@ -191,7 +191,7 @@ export default function UpdateVolunteer() {
     function handleAddPhoneConfirm() {
         const newPhone = volunteer.phones.find((p) => p.is_new)
 
-        fetch(`/api/volunteers/${volunteerId}/phones`, {
+        fetch(`/api/volunteers/volunteers/${volunteerId}/phones`, {
             method: "POST",
             headers: {
                 "Authorization": authHeader(),
@@ -311,7 +311,7 @@ export default function UpdateVolunteer() {
             }
         )
 
-        fetch(`/api/volunteers/phones/${phone_id}`, {
+        fetch(`/api/volunteers/volunteers/phones/${phone_id}`, {
 
             method: "PUT",
             headers: {
@@ -339,7 +339,7 @@ export default function UpdateVolunteer() {
     function handleDeletePhone(e, phone_id) {
         e.preventDefault()
         console.log("delete phone")
-        fetch(`/api/volunteers/phones/${phone_id}`, {
+        fetch(`/api/volunteers/volunteers/phones/${phone_id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": authHeader(),
@@ -501,7 +501,7 @@ export default function UpdateVolunteer() {
     function handleAddEmailConfirm() {
         const newEmail = volunteer.emails.find((e) => e.is_new)
 
-        fetch(`/api/volunteers/${volunteerId}/emails`, {
+        fetch(`/api/volunteers/volunteers/${volunteerId}/emails`, {
             method: "POST",
             headers: {
                 "Authorization": authHeader(),
@@ -621,7 +621,7 @@ export default function UpdateVolunteer() {
             }
         )
 
-        fetch(`/api/volunteers/emails/${email_id}`, {
+        fetch(`/api/volunteers/volunteers/emails/${email_id}`, {
 
             method: "PUT",
             headers: {
@@ -649,7 +649,7 @@ export default function UpdateVolunteer() {
     function handleDeleteEmail(e, email_id) {
         e.preventDefault()
         console.log("delete email")
-        fetch(`/api/volunteers/emails/${email_id}`, {
+        fetch(`/api/volunteers/volunteers/emails/${email_id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": authHeader(),
@@ -816,7 +816,7 @@ export default function UpdateVolunteer() {
         // Add note to component state
         const newNote = volunteer.notes.find((n) => n.is_new)
 
-        fetch(`/api/volunteers/${volunteerId}/notes`, {
+        fetch(`/api/volunteers/volunteers/${volunteerId}/notes`, {
             method: "POST",
             headers: {
                 "Authorization": authHeader(),
@@ -917,7 +917,7 @@ export default function UpdateVolunteer() {
             }
         )
 
-        fetch(`/api/volunteers/notes/${note_id}`, {
+        fetch(`/api/volunteers/volunteers/notes/${note_id}`, {
 
             method: "PUT",
             headers: {

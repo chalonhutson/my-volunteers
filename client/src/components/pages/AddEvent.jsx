@@ -27,7 +27,7 @@ export default function AddEvent() {
             event_description: eventDescriptionRef.current.value
         }
         console.log(newEvent)
-        fetch('/api/events', {
+        fetch('/api/volunteers/events', {
             method: 'POST',
             headers: {
                 "Authorization": authHeader(),
